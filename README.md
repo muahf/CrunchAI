@@ -38,7 +38,7 @@ CrunchAI сравнивается с Loki AI Pet Care, PetPulse и Sure Petcare 
 
 ## Дизайн
 
-- Figma: https://www.figma.com/design/RAZ65NFNyhU9Ip3byWNhJm/Untitled?node-id=3-5&t=RP3nPEdBCbJzk96H-1(вставить после запуска плагинов)
+- Figma: https://www.figma.com/design/RAZ65NFNyhU9Ip3byWNhJm/Untitled?node-id=3-5&t=RP3nPEdBCbJzk96H-1
 - Практика 5, дизайн-система: `docs/05-design-system.docx`
 - Практика 6, макеты: `docs/06-screens.docx`
 
