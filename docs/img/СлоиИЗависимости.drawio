@@ -1,0 +1,148 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+  <diagram name="Страница-1" id="5OOLQ8pkjGnJuMpHbJM8">
+    <mxGraphModel dx="2428" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-33" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="220" width="510" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="220" width="510" height="670" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-3" value="Android-приложение" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="220" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-5" value="Сервер и сервисы" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="390" y="220" width="116" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-7" value=":app" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="270" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-8" value="-Application, MainActivity, NavHost" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-7">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-9" value="-Hilt-модули" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-7">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-10" value="-Станция для прослушивания, сервис для отображения уведомлений" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-7">
+          <mxGeometry y="90" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-11" value=":presentation" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-200" y="470" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-12" value="-Экраны: для Станции, Наблюдателя, ведения дневника и тд" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-11">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-13" value="-ViewModel+StateFlow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-11">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-14" value="-Навигация, тема, камера для сканирования корма/миски/питомца" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-11">
+          <mxGeometry y="90" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-15" value=":data" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="470" width="220" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-16" value="-Реализация репозиториев" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-15">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-17" value="-Room для локального хранения данных" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-15">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-18" value="-Retrofit, Web-Socket для передачи звука" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-15">
+          <mxGeometry y="90" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-19" value="-YAMNet, AudioRecord" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-15">
+          <mxGeometry y="140" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-20" value=":domain" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="730" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-21" value="-Сущности" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-20">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-22" value="-Use Cases" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-20">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-23" value="-Интерфейсы репозиториев и портов" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-20">
+          <mxGeometry y="90" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-25" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.4;exitY=1.052;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.684;entryY=0.007;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-10" target="jgHNa0nFcr6MGAbo_K4A-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="580" as="sourcePoint" />
+            <mxPoint x="70" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-26" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.582;exitY=1.1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-10" target="jgHNa0nFcr6MGAbo_K4A-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="580" as="sourcePoint" />
+            <mxPoint x="70" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-27" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.636;exitY=1.084;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-14" target="jgHNa0nFcr6MGAbo_K4A-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="680" as="sourcePoint" />
+            <mxPoint x="70" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-28" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.378;exitY=1.028;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-19" target="jgHNa0nFcr6MGAbo_K4A-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="680" as="sourcePoint" />
+            <mxPoint x="70" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-29" value="FastAPI" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="270" width="206" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-30" value="-REST, WebSocket,ключи для ИИ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-29">
+          <mxGeometry y="30" width="206" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-34" value="PostgreSQL" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-35" value="ИИ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-36" value="Firebase" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="670" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-37" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.174;exitY=1.025;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-30" target="jgHNa0nFcr6MGAbo_K4A-34">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="410" as="sourcePoint" />
+            <mxPoint x="530" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-38" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.497;exitY=0.968;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-30" target="jgHNa0nFcr6MGAbo_K4A-35">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="410" as="sourcePoint" />
+            <mxPoint x="530" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-39" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.967;exitY=0.996;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-30" target="jgHNa0nFcr6MGAbo_K4A-36">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="410" as="sourcePoint" />
+            <mxPoint x="530" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-41" value="" style="endArrow=block;startArrow=none;endFill=0;startFill=0;endSize=8;html=1;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.007;entryY=0.94;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-15" target="jgHNa0nFcr6MGAbo_K4A-30">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="110" y="390" as="sourcePoint" />
+            <mxPoint x="270" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-42" value="HTTPS" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="370" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-43" value="" style="endArrow=block;startArrow=none;endFill=0;startFill=0;endSize=8;html=1;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.143;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-36" target="jgHNa0nFcr6MGAbo_K4A-7">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="450" y="502" as="sourcePoint" />
+            <mxPoint x="631" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-44" value="Push-уведомления" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="300" y="300" width="140" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

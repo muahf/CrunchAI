@@ -1,0 +1,95 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+  <diagram name="Страница-1" id="5OOLQ8pkjGnJuMpHbJM8">
+    <mxGraphModel dx="1281" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-45" value="Pet" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="10" y="250" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-46" value="id, name, species, ageMonths, weightKg, BodyCondition" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-45">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-49" value="Meal" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="230" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-50" value="id, petid, startedAt, timeEat, calmIndex" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-49">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-51" value="FoodAnalysis" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="360" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-52" value="mealID, TypePhoto, HowMuchEat, Manufacture, Risks" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-51">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-53" value="SoundEvent" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="70" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-54" value="id, MealId, SoundType confidence, status" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-53">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-55" value="Anomaly" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="240" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-56" value="id, AnomalyTypeDetected, startedAt, durationSec" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-55">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-57" value="PairingSession" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="120" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-58" value="key, role, status" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="jgHNa0nFcr6MGAbo_K4A-57">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-60" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-45" target="jgHNa0nFcr6MGAbo_K4A-49">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="240" y="340" as="sourcePoint" />
+            <mxPoint x="340" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-61" value="у одного питомца&amp;nbsp;&lt;div&gt;может быть несколько&amp;nbsp;&lt;/div&gt;&lt;div&gt;приёмов пищи,&amp;nbsp;&lt;/div&gt;&lt;div&gt;либо вообще нет&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="jgHNa0nFcr6MGAbo_K4A-60">
+          <mxGeometry x="-0.1665" y="4" relative="1" as="geometry">
+            <mxPoint x="14" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-62" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-49" target="jgHNa0nFcr6MGAbo_K4A-53">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="390" y="280" as="sourcePoint" />
+            <mxPoint x="550" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-63" value="один приём пищи состоит&lt;div&gt;&amp;nbsp;из нескольких звуков&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="jgHNa0nFcr6MGAbo_K4A-62">
+          <mxGeometry x="-0.1665" y="4" relative="1" as="geometry">
+            <mxPoint x="10" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-64" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;exitX=1.001;exitY=0.063;exitDx=0;exitDy=0;entryX=0.021;entryY=0.237;entryDx=0;entryDy=0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-50" target="jgHNa0nFcr6MGAbo_K4A-56">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="530" y="440" as="sourcePoint" />
+            <mxPoint x="600" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-65" value="за один приём пищи&lt;div&gt;может быть&lt;/div&gt;&lt;div&gt;много аномалий&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="jgHNa0nFcr6MGAbo_K4A-64">
+          <mxGeometry x="-0.1665" y="4" relative="1" as="geometry">
+            <mxPoint x="27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-68" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;exitX=1.007;exitY=0.693;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitPerimeter=0;" edge="1" parent="1" source="jgHNa0nFcr6MGAbo_K4A-50" target="jgHNa0nFcr6MGAbo_K4A-51">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="460" y="470" as="sourcePoint" />
+            <mxPoint x="530" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-69" value="два фото до/после" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="jgHNa0nFcr6MGAbo_K4A-68">
+          <mxGeometry x="-0.1665" y="4" relative="1" as="geometry">
+            <mxPoint x="10" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jgHNa0nFcr6MGAbo_K4A-70" value="0..." style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="300" y="190" as="geometry">
+            <mxPoint x="3" y="51" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
