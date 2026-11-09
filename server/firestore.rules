@@ -1,56 +1,9 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Вспомогательные функции проверки
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    // В эмуляторе пропускаем тестовые запросы без auth, в prod проверяем токен
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-
-    // 1. Коллекция пользователей (Users)
-    match /users/{userId} {
-      allow read, write: if isOwner(userId) || request.auth == null;
-    }
-
-    // 2. Устройства (Devices)
-    match /devices/{deviceId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
-    }
-
-    // 3. Подключения (Connections)
-    match /connections/{connectionId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
-    }
-
-    // 4. Профиль питомца (Pets) — доступ по connection_id
-    match /pets/{petId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
-    }
-
-    // 5. Звуковые события (Sounds)
-    match /sounds/{soundId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
-    }
-
-    // 6. Приёмы пищи (Meals)
-    match /meals/{mealId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
-    }
-
-    // 7. Аномалии (Anomalies)
-    match /anomalies/{anomalyId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
-    }
-
-    // 8. Анализы корма и миски (Food Analyses)
-    match /food_analyses/{analysisId} {
-      allow read, write: if isAuthenticated() || request.auth == null;
+    // Клиенты (телефоны) в базу напрямую не ходят: только через наш сервер.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
