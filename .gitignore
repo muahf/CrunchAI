@@ -1,0 +1,11 @@
+# Секретный ключ Firebase
+secret/
+
+# Переменные окружения
+.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
