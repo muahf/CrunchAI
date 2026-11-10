@@ -1,0 +1,2513 @@
+{
+  "info": {
+    "name": "CrunchAI API",
+    "description": "Автотесты сервера CrunchAI. Запуск по порядку (Runner / newman).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0. Сервис",
+      "item": [
+        {
+          "name": "GET /health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status ok', () => pm.expect(pm.response.json().status).to.eql('ok'));",
+                  "pm.test('Быстрее 3 секунд', () => pm.expect(pm.response.responseTime).to.be.below(3000));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Авторизация",
+      "item": [
+        {
+          "name": "POST /auth/signup (Станция)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 201', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "pm.test('Есть токен и устройство', () => { pm.expect(j.token).to.be.a('string'); pm.expect(j.device.role).to.eql('station'); });",
+                  "pm.collectionVariables.set('station_token', j.token);",
+                  "pm.collectionVariables.set('station_email', j.user.email);",
+                  "pm.test('Быстрее 3 секунд', () => pm.expect(pm.response.responseTime).to.be.below(3000));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"station_{{$timestamp}}@crunchai.example\",\n  \"password\": \"Password123!\",\n  \"role\": \"station\",\n  \"device_name\": \"Postman Станция\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /auth/signup (Наблюдатель)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 201', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "pm.test('Есть токен и устройство', () => { pm.expect(j.token).to.be.a('string'); pm.expect(j.device.role).to.eql('observer'); });",
+                  "pm.collectionVariables.set('observer_token', j.token);",
+                  "pm.collectionVariables.set('observer_email', j.user.email);",
+                  "pm.test('Быстрее 3 секунд', () => pm.expect(pm.response.responseTime).to.be.below(3000));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"observer_{{$timestamp}}@crunchai.example\",\n  \"password\": \"Password123!\",\n  \"role\": \"observer\",\n  \"device_name\": \"Postman Наблюдатель\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /auth/login (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Токен выдан', () => pm.expect(pm.response.json().token).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{observer_email}}\",\n  \"password\": \"Password123!\",\n  \"role\": \"observer\",\n  \"device_name\": \"Postman Наблюдатель\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] signup: плохие поля -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});",
+                  "pm.test('details есть', () => pm.expect(pm.response.json().error.details).to.be.an('array').that.is.not.empty);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"bad\",\n  \"password\": \"123\",\n  \"role\": \"invalid\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] signup: email занят -> 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 409', () => pm.response.to.have.status(409));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('email_taken');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{observer_email}}\",\n  \"password\": \"Password123!\",\n  \"role\": \"observer\",\n  \"device_name\": \"Другой\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] login: неверный пароль -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('invalid_credentials');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{observer_email}}\",\n  \"password\": \"WrongPassword!\",\n  \"role\": \"observer\",\n  \"device_name\": \"Postman Наблюдатель\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT /devices/me/push-token (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/devices/me/push-token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "devices",
+                "me",
+                "push-token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fcm_token\": \"test-fcm-token\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] push-token без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/devices/me/push-token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "devices",
+                "me",
+                "push-token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fcm_token\": \"x\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] push-token пустой -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/devices/me/push-token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "devices",
+                "me",
+                "push-token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fcm_token\": \"\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Привязка телефонов",
+      "item": [
+        {
+          "name": "[негатив] sessions: Наблюдатель -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('wrong_role');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "sessions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] sessions без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "sessions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /pairing/sessions (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 201', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "pm.test('Ключ вида AAA-BBB', () => pm.expect(j.key).to.match(/^[A-Z0-9]{3}-[A-Z0-9]{3}$/));",
+                  "pm.collectionVariables.set('pair_key', j.key);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "sessions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] confirm: неверный ключ -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('not_found');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "confirm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"ZZZ-999\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] confirm: Станция -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('wrong_role');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "confirm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"{{pair_key}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] confirm: пустой ключ -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "confirm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /pairing/confirm (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Есть connection_id', () => pm.expect(pm.response.json().connection_id).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "confirm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"{{pair_key}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] confirm: ключ уже использован -> 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 409', () => pm.response.to.have.status(409));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('pairing_key_used');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing",
+                "confirm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"{{pair_key}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Профиль питомца",
+      "item": [
+        {
+          "name": "[негатив] GET /pet: профиля ещё нет -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('not_found');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] GET /pet без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] PUT /pet: Станция -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('wrong_role');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Рекс\",\n  \"species\": \"dog\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] PUT /pet: вес 500 -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Рекс\",\n  \"species\": \"dog\",\n  \"weight_kg\": 500\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT /pet (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Данные сохранены', () => { const j = pm.response.json(); pm.expect(j.name).to.eql('Рекс'); pm.expect(j.id).to.be.a('string'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Рекс\",\n  \"species\": \"dog\",\n  \"age_month\": 36,\n  \"weight_kg\": 18.4,\n  \"body_score\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /pet (Станция тоже видит)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Имя совпало', () => pm.expect(pm.response.json().name).to.eql('Рекс'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Звуки",
+      "item": [
+        {
+          "name": "[негатив] batch: Наблюдатель -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('wrong_role');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": []\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] batch без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": []\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] batch: пустой список -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": []\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] batch: плохой тип -> 422",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('now_iso', new Date().toISOString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"id\": \"{{$guid}}\",\n      \"type\": \"meow\",\n      \"confidence\": 0.9,\n      \"started_at\": \"{{now_iso}}\",\n      \"duration\": 4\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] batch: 101 звук -> 413",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const now = new Date().toISOString();",
+                  "const ev = [];",
+                  "for (let i = 0; i < 101; i++) ev.push({id: pm.variables.replaceIn('{{$guid}}'), type: 'chew', confidence: 0.9, started_at: now, duration: 5});",
+                  "pm.collectionVariables.set('big_batch', JSON.stringify({events: ev}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 413', () => pm.response.to.have.status(413));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('batch_too_large');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{{big_batch}}"
+            }
+          }
+        },
+        {
+          "name": "POST /events/batch (успех)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('now_iso', new Date().toISOString());",
+                  "pm.collectionVariables.set('sound_cough', pm.variables.replaceIn('{{$guid}}'));",
+                  "pm.collectionVariables.set('sound_chew', pm.variables.replaceIn('{{$guid}}'));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('Принято 2, дублей нет', () => { pm.expect(j.accepted).to.eql(2); pm.expect(j.duplicates).to.eql([]); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"id\": \"{{sound_cough}}\",\n      \"type\": \"cough\",\n      \"confidence\": 0.9,\n      \"started_at\": \"{{now_iso}}\",\n      \"duration\": 4\n    },\n    {\n      \"id\": \"{{sound_chew}}\",\n      \"type\": \"chew\",\n      \"confidence\": 0.9,\n      \"started_at\": \"{{now_iso}}\",\n      \"duration\": 10\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /events/batch (повтор: идемпотентность)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('now_iso', new Date().toISOString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('Ничего нового, 2 дубля', () => { pm.expect(j.accepted).to.eql(0); pm.expect(j.duplicates).to.have.lengthOf(2); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/batch",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "batch"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"id\": \"{{sound_cough}}\",\n      \"type\": \"cough\",\n      \"confidence\": 0.9,\n      \"started_at\": \"{{now_iso}}\",\n      \"duration\": 4\n    },\n    {\n      \"id\": \"{{sound_chew}}\",\n      \"type\": \"chew\",\n      \"confidence\": 0.9,\n      \"started_at\": \"{{now_iso}}\",\n      \"duration\": 10\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "[негатив] events/audio: не аудио -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/events/audio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "events",
+                "audio"
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "text",
+                  "value": "это не аудио"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Дневник",
+      "item": [
+        {
+          "name": "GET /meals (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('Формат страницы', () => { pm.expect(j.items).to.be.an('array'); pm.expect(j).to.have.property('next_cursor'); pm.expect(j.has_more).to.be.a('boolean'); });",
+                  "pm.test('Есть приём пищи с calm_index 1..10', () => { pm.expect(j.items).to.not.be.empty; pm.expect(j.items[0].calm_index).to.be.within(1, 10); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/meals?limit=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meals"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /anomalies (кашель записан)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('Кашель попал в аномалии', () => pm.expect(j.items.map(a => a.id)).to.include(pm.collectionVariables.get('sound_cough')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/anomalies?limit=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "anomalies"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /diary/summary?period=week",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('7 дней', () => pm.expect(j.days).to.have.lengthOf(7));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/diary/summary?period=week",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "diary",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "week"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /diary/summary?period=month",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+                  "pm.test('30 дней', () => pm.expect(pm.response.json().days).to.have.lengthOf(30));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/diary/summary?period=month",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "diary",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] meals: limit=0 -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/meals?limit=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meals"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] meals: limit=101 -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/meals?limit=101",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meals"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "101"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] meals: битый cursor -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/meals?cursor=abc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meals"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": "abc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] meals без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/meals",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meals"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] anomalies без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/anomalies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "anomalies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] summary: period=year -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/diary/summary?period=year",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "diary",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "year"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] summary без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/diary/summary?period=week",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "diary",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "week"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. ИИ-анализ фото и Радионяня",
+      "item": [
+        {
+          "name": "[негатив] food-analyses без токена -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/food-analyses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "food-analyses"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] food-analyses: Станция -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('wrong_role');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/food-analyses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "food-analyses"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] food-analyses: без файла -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('validation_error');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/food-analyses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "food-analyses"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] GET food-analyses/нет такого -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('not_found');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/food-analyses/no-such-id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "food-analyses",
+                "no-such-id"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] live/sessions -> 501",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 501', () => pm.response.to.have.status(501));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('not_implemented');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/live/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "live",
+                "sessions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] live/sessions: Станция -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('wrong_role');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/live/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "live",
+                "sessions"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Уборка",
+      "item": [
+        {
+          "name": "DELETE /pet (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] DELETE /pet повторно -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('not_found');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /pairing (успех)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pairing",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pairing"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] meals после отвязки -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('not_found');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/meals",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meals"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /account (Станция)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{station_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/account",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "account"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /account (Наблюдатель)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/account",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "account"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[негатив] старый токен после удаления -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Статус 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Единый формат ошибки', () => {",
+                  "  const e = pm.response.json().error;",
+                  "  pm.expect(e).to.be.an('object');",
+                  "  pm.expect(e.code).to.eql('token_invalid');",
+                  "  pm.expect(e.message).to.be.a('string');",
+                  "  pm.expect(e.request_id).to.match(/^req_/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{observer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/pet",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pet"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:5000"
+    }
+  ]
+}
