@@ -1,0 +1,393 @@
+openapi: 3.0.3
+info:
+  title: CrunchAI Backend API
+  description: Спецификация API для системы пассивного мониторинга питания питомца CrunchAI (версия v1)
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8080/api/v1
+    description: Локальный эмулятор Firebase / FastAPI
+  - url: https://api.crunchai.example/api/v1
+    description: Продакшн сервер
+
+paths:
+  /auth/signup:
+    post:
+      summary: Создание аккаунта / регистрация телефона
+      description: Регистрирует новое устройство с ролью observer или station
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+            example:
+              email: anna@example.com
+              password: Str0ng-pass
+              role: observer
+              device_name: Телефон Анны
+      responses:
+        '201':
+          description: Устройство успешно зарегистрировано
+          content:
+            application/json:
+              example:
+                user:
+                  id: 2c5f0a31-9b57-4f0e-8d1a-6a3c0f6b7e21
+                  email: anna@example.com
+                device:
+                  id: 7d1c1c5e-6f0e-4b1c-9d55-0c4c1a2f9a10
+                  role: observer
+                  name: Телефон Анны
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                expires_in: 7776000
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /pairing/sessions:
+    post:
+      summary: Создать ключ привязки (Станция)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Ключ успешно создан
+          content:
+            application/json:
+              example:
+                key: 4F7-A9C
+                expires_at: '2026-11-02T12:54:03Z'
+
+  /pairing/confirm:
+    post:
+      summary: Подтверждение привязки по ключу (Наблюдатель)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PairConfirmRequest'
+            example:
+              key: 4F7-A9C
+      responses:
+        '200':
+          description: Устройства успешно привязаны
+          content:
+            application/json:
+              example:
+                connection_id: 3b0e9b86-2f8f-4d7b-8f4d-1a8a7f2c9e11
+                station_name: Телефон у миски (Станция)
+        '410':
+          $ref: '#/components/responses/KeyExpired'
+
+  /pet:
+    get:
+      summary: Профиль питомца
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Данные питомца
+          content:
+            application/json:
+              example:
+                id: 0c9f6a44-5d53-45f4-a0b2-6a2b7d5b9d21
+                name: Рекс
+                species: dog
+                age_month: 36
+                weight_kg: 18.4
+                body_score: 5
+    put:
+      summary: Создать или изменить профиль питомца (Наблюдатель)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetProfileRequest'
+            example:
+              name: Рекс
+              species: dog
+              age_month: 36
+              weight_kg: 18.4
+              body_score: 5
+      responses:
+        '200':
+          description: Профиль обновлен
+          content:
+            application/json:
+              example:
+                id: 0c9f6a44-5d53-45f4-a0b2-6a2b7d5b9d21
+                name: Рекс
+                species: dog
+                age_month: 36
+                weight_kg: 18.4
+                body_score: 5
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /events/batch:
+    post:
+      summary: Отправить пачку звуков (Станция)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventBatchRequest'
+            example:
+              events:
+                - id: 11111111-1111-4111-8111-111111111111
+                  type: cough
+                  confidence: 0.91
+                  started_at: '2026-11-02T12:44:03Z'
+                  duration: 6
+                - id: 22222222-2222-4222-8222-222222222222
+                  type: chew
+                  confidence: 0.83
+                  started_at: '2026-11-02T12:41:20Z'
+                  duration: 2
+      responses:
+        '200':
+          description: Результат обработки пачки
+          content:
+            application/json:
+              example:
+                accepted: 1
+                duplicates:
+                  - 22222222-2222-4222-8222-222222222222
+        '413':
+          $ref: '#/components/responses/BatchTooLarge'
+
+  /meals:
+    get:
+      summary: Приёмы пищи (список по страницам)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Страница списка приёмов пищи
+          content:
+            application/json:
+              example:
+                items:
+                  - id: 9a3e3c1e-5a43-4d4a-a8b7-0f9f1c1d2e01
+                    started_at: '2026-11-02T12:40:00Z'
+                    duration: 240
+                    calm_index: 8
+                  - id: 9a3e3c1e-5a43-4d4a-a8b7-0f9f1c1d2e02
+                    started_at: '2026-11-02T08:15:00Z'
+                    duration: 360
+                    calm_index: 5
+                next_cursor: eyJ0IjoiMjAyNi0xMS0wMlQwODoxNTowMFoifQ
+                has_more: true
+
+  /food-analyses:
+    post:
+      summary: Отправить фото миски или корма на анализ (Наблюдатель)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                kind:
+                  type: string
+                  enum: [bowl_after, feed_label]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Результат анализа фото
+          content:
+            application/json:
+              example:
+                id: 4d0b7c4c-9c2b-4a77-8a0d-3f4f0e2a5b01
+                kind: bowl_after
+                photo_url: https://api.crunchai.example/files/4d0b7c4c.jpg
+                eaten_percent: 70
+                created_at: '2026-11-02T12:45:10Z'
+        '413':
+          $ref: '#/components/responses/PhotoTooLarge'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    SignupRequest:
+      type: object
+      required:
+        - email
+        - password
+        - role
+        - device_name
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        role:
+          type: string
+          enum: [observer, station]
+        device_name:
+          type: string
+
+    PairConfirmRequest:
+      type: object
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          example: 4F7-A9C
+
+    SoundEventDTO:
+      type: object
+      required:
+        - id
+        - type
+        - confidence
+        - started_at
+        - duration
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        started_at:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+
+    EventBatchRequest:
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoundEventDTO'
+          maxItems: 100
+
+    PetProfileRequest:
+      type: object
+      required:
+        - name
+        - species
+        - age_month
+        - weight_kg
+        - body_score
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        age_month:
+          type: integer
+        weight_kg:
+          type: number
+        body_score:
+          type: integer
+          minimum: 1
+          maximum: 9
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+            request_id:
+              type: string
+
+  responses:
+    ValidationError:
+      description: Ошибка валидации параметров (HTTP 422)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: validation_error
+              message: Проверьте поля запроса
+              details:
+                - field: weight_kg
+                  issue: должно быть от 0,1 до 120
+              request_id: req_13
+
+    KeyExpired:
+      description: Ключ истёк (HTTP 410)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: pairing_key_expired
+              message: Ключ истёк
+              request_id: req_99
+
+    BatchTooLarge:
+      description: Превышен размер пачки (HTTP 413)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: batch_too_large
+              message: В пачке больше 100 звуков
+              request_id: req_45
+
+    PhotoTooLarge:
+      description: Размер фото превышает 8 МБ (HTTP 413)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: photo_too_large
+              message: Фото больше 8 МБ
+              request_id: req_77

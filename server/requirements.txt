@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+google-cloud-firestore
+pyjwt
+python-multipart
+pydantic
+python-dotenv
+google-genai

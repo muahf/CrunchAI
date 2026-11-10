@@ -1,0 +1,9 @@
+{
+  "indexes": [
+    {"collectionGroup": "meals", "queryScope": "COLLECTION",
+     "fields": [{"fieldPath": "connection_id", "order": "ASCENDING"}, {"fieldPath": "started_at", "order": "DESCENDING"}]},
+    {"collectionGroup": "anomalies", "queryScope": "COLLECTION",
+     "fields": [{"fieldPath": "connection_id", "order": "ASCENDING"}, {"fieldPath": "started_at", "order": "DESCENDING"}]}
+  ],
+  "fieldOverrides": []
+}
