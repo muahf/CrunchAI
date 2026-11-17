@@ -4,13 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.example.crunchai.ui.components.ComponentsShowcase
 import com.example.crunchai.ui.theme.CrunchAiTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,30 +17,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CrunchAiTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            val systemDark = isSystemInDarkTheme()
+            var dark by rememberSaveable { mutableStateOf(systemDark) }
+            var dynamic by rememberSaveable { mutableStateOf(false) }
+
+            CrunchAiTheme(darkTheme = dark, dynamicColor = dynamic) {
+                ComponentsShowcase(
+                    darkTheme = dark,
+                    dynamicColor = dynamic,
+                    onDarkThemeChange = { dark = it },
+                    onDynamicColorChange = { dynamic = it },
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CrunchAiTheme {
-        Greeting("Android")
     }
 }

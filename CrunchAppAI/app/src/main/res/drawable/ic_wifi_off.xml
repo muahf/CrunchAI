@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:width="24dp"
+	android:height="24dp"
+	android:viewportWidth="18"
+	android:viewportHeight="18">
+
+	<!-- Перечёркивающая линия -->
+	<path
+		android:pathData="M2.25,2.25L15.75,15.75"
+		android:strokeColor="#FF000000"
+		android:strokeWidth="1.5"
+		android:strokeLineCap="square"
+		android:strokeLineJoin="round" />
+
+	<!-- Дуги Wi-Fi -->
+	<path
+		android:pathData="M12,10.125C11.5197,9.62175 10.929225,9.236626 10.275,9M6,10.125C6.522998,9.601575 7.167015,9.215175 7.875,9M14.25,7.125037C13.30485,6.187635 12.146925,5.492865 10.875,5.100038M3.75,7.125037C4.616805,6.344415 5.639295,5.756483 6.75,5.400038"
+		android:strokeColor="#FF000000"
+		android:strokeWidth="1.5"
+		android:strokeLineCap="square"
+		android:strokeLineJoin="round" />
+
+	<!-- Точка -->
+	<path
+		android:pathData="M9.9,13.5C9.9,13.0029 9.4971,12.600075 9,12.600075C8.502975,12.600075 8.1,13.0029 8.1,13.5C8.1,13.997026 8.502975,14.4 9,14.4C9.4971,14.4 9.9,13.997026 9.9,13.5Z"
+		android:strokeColor="#FF000000"
+		android:strokeWidth="1.5"
+		android:strokeLineCap="square"
+		android:strokeLineJoin="round" />
+</vector>
