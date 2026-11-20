@@ -1,19 +1,23 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+// Чистый Kotlin-модуль: в нём нет ничего из Android.
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.jlleitschuh.ktlint)
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }
 }
 
 dependencies {
-    implementation(libs.kotlinx.coroutines.core)
-
-        implementation(libs.javax.inject)
-
-        testImplementation(libs.junit)
-        testImplementation(libs.kotlinx.coroutines.test)
-
+    api(libs.kotlinx.coroutines.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
