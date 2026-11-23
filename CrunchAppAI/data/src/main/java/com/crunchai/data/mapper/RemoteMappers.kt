@@ -1,11 +1,16 @@
 package com.crunchai.data.mapper
 
+import com.crunchai.data.remote.dto.AnomalyDto
 import com.crunchai.data.remote.dto.FoodAnalysisDto
+import com.crunchai.data.remote.dto.MealDto
 import com.crunchai.data.remote.dto.PairingSessionDto
 import com.crunchai.data.remote.dto.SoundEventDto
 import com.crunchai.data.remote.dto.SyncReportDto
+import com.example.crunchai.domain.model.Anomaly
+import com.example.crunchai.domain.model.AnomalyType
 import com.example.crunchai.domain.model.DeviceRole
 import com.example.crunchai.domain.model.FoodAnalysis
+import com.example.crunchai.domain.model.Meal
 import com.example.crunchai.domain.model.PairingSession
 import com.example.crunchai.domain.model.PairingStatus
 import com.example.crunchai.domain.model.PhotoKind
@@ -43,4 +48,15 @@ fun FoodAnalysisDto.toDomain(): FoodAnalysis =
         eatenPercent = eatenPercent,
         composition = composition,
         risks = risks,
+    )
+
+fun MealDto.toDomain(): Meal = Meal(id, Instant.parse(startedAt), durationSeconds, calmIndex)
+
+fun AnomalyDto.toDomain(): Anomaly =
+    Anomaly(
+        id = id,
+        type = AnomalyType.valueOf(type.uppercase()),
+        startedAt = Instant.parse(startedAt),
+        durationSeconds = durationSeconds,
+        seen = seen,
     )

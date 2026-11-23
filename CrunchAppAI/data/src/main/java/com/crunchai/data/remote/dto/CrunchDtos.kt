@@ -44,3 +44,20 @@ data class FoodAnalysisDto(
     val composition: String? = null,
     val risks: List<String> = emptyList(),
 )
+
+@Serializable
+data class MealDto(
+    val id: String,
+    @SerialName("started_at") val startedAt: String,
+    @SerialName("duration_seconds") val durationSeconds: Int,
+    @SerialName("calm_index") val calmIndex: Int,
+)
+
+@Serializable
+data class AnomalyDto(
+    val id: String,
+    val type: String,
+    @SerialName("started_at") val startedAt: String,
+    @SerialName("duration_seconds") val durationSeconds: Int,
+    val seen: Boolean = false,
+)
