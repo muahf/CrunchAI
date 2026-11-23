@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.usecase.MonitorSoundsUseCaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-20T09:05:59.918Z" hostname="DESKTOP-029KHI5" time="0.009">
+<testsuite name="com.example.crunchai.domain.usecase.MonitorSoundsUseCaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-23T10:58:19.390Z" hostname="DESKTOP-029KHI5" time="0.019">
   <properties/>
-  <testcase name="отбрасывает шум OTHER и низкую уверенность, сохраняет значимые звуки" classname="com.example.crunchai.domain.usecase.MonitorSoundsUseCaseTest" time="0.009"/>
+  <testcase name="отбрасывает шум OTHER и низкую уверенность, сохраняет значимые звуки" classname="com.example.crunchai.domain.usecase.MonitorSoundsUseCaseTest" time="0.019"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

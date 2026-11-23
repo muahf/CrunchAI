@@ -6,8 +6,9 @@ import com.example.crunchai.domain.model.DiaryDay
 import com.example.crunchai.domain.model.DiaryPeriod
 import com.example.crunchai.domain.repository.DiaryRepository
 import java.time.ZoneOffset
+import javax.inject.Inject
 
-class GetDiaryUseCase(
+class GetDiaryUseCase @Inject constructor(
     private val repository: DiaryRepository,
 ) {
     suspend operator fun invoke(period: DiaryPeriod): DomainResult<Diary> {

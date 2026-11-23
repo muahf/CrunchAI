@@ -9,9 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.example.crunchai.ui.components.ComponentsShowcase
+import com.crunchai.presentation.navigation.CrunchNavGraph
 import com.example.crunchai.ui.theme.CrunchAiTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +24,7 @@ class MainActivity : ComponentActivity() {
             var dynamic by rememberSaveable { mutableStateOf(false) }
 
             CrunchAiTheme(darkTheme = dark, dynamicColor = dynamic) {
-                ComponentsShowcase(
-                    darkTheme = dark,
-                    dynamicColor = dynamic,
-                    onDarkThemeChange = { dark = it },
-                    onDynamicColorChange = { dynamic = it },
-                )
+                CrunchNavGraph()
             }
         }
     }
