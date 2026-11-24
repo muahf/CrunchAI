@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
-import com.example.crunchai.ui.theme.Space
+import com.crunchai.presentation.ui.theme.Space
 
 private val FieldHeight = 56.dp
 private val NormalBorder = 1.5.dp

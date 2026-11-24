@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.crunchai.ui.theme.Space
+import com.crunchai.presentation.ui.theme.Space
 
 private val ChipHeight = 32.dp
 private val ChipIconSize = 16.dp

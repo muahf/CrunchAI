@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.componets
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -13,8 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.crunchai.ui.theme.CrunchAiTheme
-import com.example.crunchai.ui.theme.Space
+import com.crunchai.presentation.ui.components.AppBanner
+import com.crunchai.presentation.ui.components.AppButton
+import com.crunchai.presentation.ui.components.AppCard
+import com.crunchai.presentation.ui.components.AppChip
+import com.crunchai.presentation.ui.components.AppTag
+import com.crunchai.presentation.ui.components.AppTextField
+import com.crunchai.presentation.ui.components.BannerKind
+import com.crunchai.presentation.ui.components.ButtonType
+import com.crunchai.presentation.ui.components.CardKind
+import com.crunchai.presentation.ui.components.TagKind
+import com.crunchai.presentation.ui.theme.CrunchAiTheme
+import com.crunchai.presentation.ui.theme.Space
 
 /** Одна аннотация вместо двух: превью сразу в светлой и в тёмной теме. */
 @Preview(name = "Светлая тема")
@@ -50,7 +60,13 @@ private fun TextFieldsPreview() = PreviewBox {
     Column(Modifier.width(260.dp), verticalArrangement = Arrangement.spacedBy(Space.s4)) {
         AppTextField("Рекс", {}, "Имя")
         AppTextField("", {}, "Имя", placeholder = "Введите имя")
-        AppTextField("", {}, "Имя", placeholder = "Введите имя", errorText = "Введите число от 1 до 80")
+        AppTextField(
+            "",
+            {},
+            "Имя",
+            placeholder = "Введите имя",
+            errorText = "Введите число от 1 до 80"
+        )
         AppTextField("Рекс", {}, "Имя", enabled = false)
     }
 }

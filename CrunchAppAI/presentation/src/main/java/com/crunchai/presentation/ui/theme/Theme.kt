@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.theme
+package com.crunchai.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

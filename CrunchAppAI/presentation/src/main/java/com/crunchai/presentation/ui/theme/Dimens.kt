@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.theme
+package com.crunchai.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

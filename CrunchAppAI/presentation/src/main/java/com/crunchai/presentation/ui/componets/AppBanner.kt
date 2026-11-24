@@ -1,4 +1,5 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.components
+
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -24,9 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.crunchai.R
-import com.example.crunchai.ui.theme.Space
-import com.example.crunchai.ui.theme.extendedColors
+import com.crunchai.presentation.R
+import com.crunchai.presentation.ui.theme.Space
+import com.crunchai.presentation.ui.theme.extendedColors
 
 /** Offline: «Нет интернета» (жёлтый, иконка пульсирует). Error: ошибка сервера с кнопкой «Повторить» (красный). */
 enum class BannerKind { Offline, Error }

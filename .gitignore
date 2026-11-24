@@ -4,8 +4,23 @@ secret/
 # Переменные окружения
 .env
 
-# Python
+# Python / Firebase
 __pycache__/
 *.pyc
 venv/
 .venv/
+.pytest_cache/
+firestore-debug.log
+
+# Android (работает и в корне, и внутри CrunchAppAI/)
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab

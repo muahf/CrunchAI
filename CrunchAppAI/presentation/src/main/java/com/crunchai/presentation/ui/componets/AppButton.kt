@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.crunchai.ui.theme.Space
+import com.crunchai.presentation.ui.theme.Space
 
 /** Виды кнопок из макета: «Components / Light». */
 enum class ButtonType { Primary, Tonal, Outline, Text, Danger }
@@ -33,6 +33,7 @@ fun AppButton(
     type: ButtonType = ButtonType.Primary,
     enabled: Boolean = true,
     loading: Boolean = false,
+    leadingIcon: (@Composable () -> Unit)? = null,
 ) {
     val colors = MaterialTheme.colorScheme
     val isFlat = type == ButtonType.Outline || type == ButtonType.Text
@@ -73,6 +74,10 @@ fun AppButton(
             horizontal = if (type == ButtonType.Text) Space.s3 else ButtonPadding,
         ),
     ) {
+        if (leadingIcon != null && !loading) {
+            leadingIcon()
+            Spacer(Modifier.width(Space.s2))
+        }
         if (loading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(18.dp),

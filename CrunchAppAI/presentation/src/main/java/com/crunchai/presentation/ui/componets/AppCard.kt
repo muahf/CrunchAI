@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,8 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.crunchai.ui.theme.Space
-import com.example.crunchai.ui.theme.extendedColors
+import com.crunchai.presentation.ui.theme.Space
+import com.crunchai.presentation.ui.theme.extendedColors
 
 /** Виды карточки из макета. */
 enum class CardKind { Default, Info, Warning, Error, Success }

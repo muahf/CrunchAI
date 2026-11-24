@@ -1,4 +1,4 @@
-name: Server tests
+name: Server & Android tests
 
 on:
   push:
@@ -57,3 +57,21 @@ jobs:
       - name: Запуск сервера и коллекции Postman
         working-directory: server
         run: firebase emulators:exec --only firestore --project crunchai-c91e2 "bash ci/run_postman.sh"
+
+  android-tests:
+    name: Android (Domain & Data unit-тесты + ktlint)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CrunchAppAI
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Права на запуск gradlew
+        run: chmod +x gradlew
+      - name: Запуск unit-тестов и ktlint
+        run: ./gradlew :domain:test :data:testDebugUnitTest ktlintCheck

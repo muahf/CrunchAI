@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.theme
+package com.crunchai.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.crunchai.R
+import com.crunchai.presentation.R
 
 // Шрифты из макета: Lora для заголовков, Inter для основного текста.
 val Lora = FontFamily(

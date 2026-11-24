@@ -1,4 +1,4 @@
-package com.example.crunchai.ui.components
+package com.crunchai.presentation.ui.componets
 
 import android.os.Build
 import androidx.compose.foundation.background
@@ -21,7 +21,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.crunchai.ui.theme.Space
+import com.crunchai.presentation.ui.components.AppBanner
+import com.crunchai.presentation.ui.components.AppButton
+import com.crunchai.presentation.ui.components.AppCard
+import com.crunchai.presentation.ui.components.AppChip
+import com.crunchai.presentation.ui.components.AppTag
+import com.crunchai.presentation.ui.components.AppTextField
+import com.crunchai.presentation.ui.components.BannerKind
+import com.crunchai.presentation.ui.components.ButtonType
+import com.crunchai.presentation.ui.components.CardKind
+import com.crunchai.presentation.ui.components.TagKind
+import com.crunchai.presentation.ui.theme.Space
 
 /** Демо-экран: все компоненты дизайн-системы и переключатели темы. */
 @Composable
@@ -67,12 +77,24 @@ fun ComponentsShowcase(
             }
             Row(horizontalArrangement = Arrangement.spacedBy(Space.s2)) {
                 AppButton("Загрузка", {}, Modifier.weight(1f), loading = true)
-                AppButton("Загрузка", {}, Modifier.weight(1f), type = ButtonType.Tonal, loading = true)
+                AppButton(
+                    "Загрузка",
+                    {},
+                    Modifier.weight(1f),
+                    type = ButtonType.Tonal,
+                    loading = true
+                )
             }
         }
 
         Section("Поле ввода") {
-            AppTextField(name, { name = it }, "Имя", Modifier.fillMaxWidth(), placeholder = "Введите имя")
+            AppTextField(
+                name,
+                { name = it },
+                "Имя",
+                Modifier.fillMaxWidth(),
+                placeholder = "Введите имя"
+            )
             AppTextField(
                 value = "",
                 onValueChange = {},
