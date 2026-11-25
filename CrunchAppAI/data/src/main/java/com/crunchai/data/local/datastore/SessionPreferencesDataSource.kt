@@ -56,7 +56,20 @@ class SessionPreferencesDataSource
                 prefs[Keys.PAIR_KEY] = pairKey
             }
         }
+    /** Вход выполнен: запоминаем токен и роль. Ключ привязки (если уже был) не трогаем. */
+    suspend fun saveAuth(
+        token: String,
+        role: DeviceRole,
+    ) {
+        context.sessionDataStore.edit { prefs ->
+            prefs[Keys.AUTH_TOKEN] = token
+            prefs[Keys.DEVICE_ROLE] = role.name
+        }
+    }
 
+    /** Есть ли сохранённый токен (для решения «показывать вход или главную»). */
+    val isLoggedInFlow: Flow<Boolean> =
+        context.sessionDataStore.data.map { prefs -> prefs[Keys.AUTH_TOKEN] != null }
         suspend fun clear() {
             context.sessionDataStore.edit { it.clear() }
         }

@@ -63,9 +63,16 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import com.crunchai.presentation.common.formatTime
+import com.crunchai.presentation.ui.components.AppBottomBar
+import com.crunchai.presentation.ui.components.ContentCard
+import com.crunchai.presentation.ui.components.ErrorState
+import com.crunchai.presentation.ui.components.MainTab
+import com.crunchai.presentation.ui.components.MealRow
 
 @Composable
 fun HomeRoute(
+    onNavigateToDiary: () -> Unit,
     onNavigateToPairing: () -> Unit,
     onNavigateToFoodAnalysis: () -> Unit,
     onNavigateToPetProfile: () -> Unit,
@@ -75,6 +82,7 @@ fun HomeRoute(
     HomeScreen(
         state = uiState,
         onRetry = viewModel::onRetry,
+        onNavigateToDiary = onNavigateToDiary,
         onNavigateToPairing = onNavigateToPairing,
         onNavigateToFoodAnalysis = onNavigateToFoodAnalysis,
         onNavigateToPetProfile = onNavigateToPetProfile,
@@ -88,6 +96,7 @@ fun HomeScreen(
     onNavigateToPairing: () -> Unit,
     onNavigateToFoodAnalysis: () -> Unit,
     onNavigateToPetProfile: () -> Unit,
+    onNavigateToDiary: () -> Unit,
 ) {
     val zone = ZoneId.systemDefault()
     val content = state.contentState as? HomeContentState.Content
@@ -96,7 +105,8 @@ fun HomeScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        bottomBar = { HomeBottomBar(onPet = onNavigateToPetProfile) },
+        bottomBar = { AppBottomBar(selected = MainTab.Home,
+            onHome = {}, onDiary = onNavigateToDiary, onPet = onNavigateToPetProfile) },
     ) { inner ->
         Column(
             modifier =
@@ -133,7 +143,7 @@ fun HomeScreen(
                     }
 
                 is HomeContentState.Error ->
-                    ErrorBlock(
+                    ErrorState(
                         message = c.message,
                         onRetry = onRetry,
                         modifier = Modifier.weight(1f),
@@ -181,7 +191,7 @@ fun HomeScreen(
                                 )
                             }
                         } else {
-                            items(meals.take(3), key = { "m_${it.id}" }) { MealItem(it, zone) }
+                            items(meals.take(3), key = { "m_${it.id}" }) { MealRow(it, zone) }
                         }
                     }
             }
@@ -209,18 +219,7 @@ private fun CenterBox(
 ) = Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { content() }
 
 /** Простая карточка-контейнер: белая, с рамкой, скругление 16. */
-@Composable
-private fun ContentCard(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    OutlinedCard(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-    ) { content() }
-}
+
 
 @Composable
 private fun PetCard(
@@ -354,159 +353,7 @@ private fun StatCard(
     }
 }
 
-@Composable
-private fun MealItem(
-    meal: Meal,
-    zone: ZoneId,
-) {
-    val minutes = (meal.durationSeconds / 60).coerceAtLeast(1)
-    val calm = meal.calmIndex >= 7
 
-    ContentCard(Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                Modifier.size(40.dp).clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    painterResource(R.drawable.bowl),
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
-            Column(Modifier.weight(1f)) {
-                Text(
-                    "${formatTime(meal.startedAt, zone)} · $minutes мин",
-                    style = MaterialTheme.typography.labelLarge,
-                )
-                Text(
-                    "Приём пищи",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            if (calm) {
-                AppTag("Спокойно", kind = TagKind.Ok, showDefaultIcon = false)
-            } else {
-                AppTag("Беспокойно", kind = TagKind.Warning)
-            }
-        }
-    }
-}
-
-@Composable
-private fun HomeBottomBar(onPet: () -> Unit) {
-    Column(Modifier.background(MaterialTheme.colorScheme.surface)) {
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Row(Modifier.fillMaxWidth().navigationBarsPadding().height(72.dp)) {
-            BottomItem("Главная", R.drawable.home, selected = true, onClick = {})
-            BottomItem("Дневник", R.drawable.diary, selected = false, onClick = { /* экран «Дневник» позже */ })
-            BottomItem("Питомец", R.drawable.paw, selected = false, onClick = onPet)
-        }
-    }
-}
-
-/** Пункт нижней навигации как в макете: «таблетка» 56×28, иконка 24, подпись 12. */
-@Composable
-private fun RowScope.BottomItem(
-    label: String,
-    iconRes: Int,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    Column(
-        modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
-    ) {
-        Box(
-            modifier =
-                Modifier
-                    .size(width = 56.dp, height = 28.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(if (selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painterResource(iconRes),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint =
-                    if (selected) {
-                        MaterialTheme.colorScheme.onPrimaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-            )
-        }
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun ErrorBlock(
-    message: String,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-    ) {
-        Box(
-            Modifier.size(88.dp).clip(CircleShape)
-                .background(MaterialTheme.colorScheme.errorContainer),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Filled.Warning,
-                contentDescription = null,
-                modifier = Modifier.size(40.dp),
-                tint = MaterialTheme.colorScheme.onErrorContainer,
-            )
-        }
-        Text(
-            "Не удалось загрузить данные",
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            message,
-            modifier = Modifier.widthIn(max = 280.dp),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
-        AppButton(
-            text = "Повторить",
-            onClick = onRetry,
-            leadingIcon = {
-                Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.size(20.dp))
-            },
-        )
-        AppButton(
-            text = "Подробности",
-            onClick = { /* покажем детали ошибки позже */ },
-            type = ButtonType.Text,
-        )
-    }
-}
-
-private fun formatTime(
-    instant: Instant,
-    zone: ZoneId,
-): String = DateTimeFormatter.ofPattern("HH:mm").format(instant.atZone(zone))
 
 private fun petSubtitle(pet: Pet): String {
     val species =

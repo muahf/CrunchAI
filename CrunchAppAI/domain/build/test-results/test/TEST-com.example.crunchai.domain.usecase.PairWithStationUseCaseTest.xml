@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-23T10:58:19.424Z" hostname="DESKTOP-029KHI5" time="0.018">
+<testsuite name="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-25T18:36:28.407Z" hostname="DESKTOP-029KHI5" time="0.013">
   <properties/>
-  <testcase name="ключ неверного вида это ошибка и сервер не вызывается" classname="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" time="0.008"/>
-  <testcase name="ключ приводится к верхнему регистру и без пробелов" classname="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" time="0.004"/>
+  <testcase name="ключ неверного вида это ошибка и сервер не вызывается" classname="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" time="0.005"/>
+  <testcase name="ключ приводится к верхнему регистру и без пробелов" classname="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" time="0.003"/>
   <testcase name="истёкший ключ возвращается как ошибка" classname="com.example.crunchai.domain.usecase.PairWithStationUseCaseTest" time="0.005"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

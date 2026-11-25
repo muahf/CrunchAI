@@ -14,12 +14,28 @@ android {
     defaultConfig {
         minSdk = 26
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    buildTypes {
+        debug {
+            // 10.0.2.2 — это «компьютер» для эмулятора Android, 192.168.1.8 — IP в локальном Wi-Fi
+            buildConfigField("String", "BASE_URL", "\"http://192.168.1.8:8000/api/v1/\"")
+        }
+        release {
+            buildConfigField("String", "BASE_URL", "\"https://api.crunchai.example.com/api/v1/\"")
+        }
     }
 }
 

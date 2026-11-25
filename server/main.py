@@ -2,13 +2,13 @@
 Сервер CrunchAI: FastAPI + Cloud Firestore (эмулятор).  Практика 9.
 
 Как читать файл (сверху вниз):
-  1. Настройки и подключение к базе
-  2. Ошибки: единый формат {"error": {...}}
-  3. Схемы: какие поля принимает сервер
-  4. Пароли и токены
-  5. Проверка токена и роли (авторизация)
-  6. Вспомогательные функции для базы
-  7. Запросы (адреса API), по группам
+1. Настройки и подключение к базе
+2. Ошибки: единый формат {"error": {...}}
+3. Схемы: какие поля принимает сервер
+4. Пароли и токены
+5. Проверка токена и роли (авторизация)
+6. Вспомогательные функции для базы
+7. Запросы (адреса API), по группам
 """
 import base64
 import hashlib
@@ -256,14 +256,20 @@ def where(collection: str, field: str, op: str, value):
     return db.collection(collection).where(filter=FieldFilter(field, op, value))
 
 
+def optional_connection(auth: Auth):
+    """Возвращает подключение телефона, если пара уже создана, или None."""
+    field = "station_id" if auth.role == "station" else "observer_id"
+    paired = [c for c in where("connections", field, "==", auth.device_id).stream() if c.to_dict().get("observer_id")]
+    return max(paired, key=lambda c: c.to_dict()["time_key"]) if paired else None
+
+
 def current_connection(auth: Auth):
     """Подключение этого телефона. Все данные дальше берутся только по его номеру:
     так телефон видит только своё (правило доступа к строкам на стороне сервера)."""
-    field = "station_id" if auth.role == "station" else "observer_id"
-    paired = [c for c in where("connections", field, "==", auth.device_id).stream() if c.to_dict().get("observer_id")]
-    if not paired:
+    conn = optional_connection(auth)
+    if not conn:
         raise ApiError(404, "not_found", "Телефоны ещё не связаны: выполните привязку по QR-коду")
-    return max(paired, key=lambda c: c.to_dict()["time_key"])
+    return conn
 
 
 def find_pet(connection_id: str):
@@ -446,7 +452,10 @@ def pet_out(pet_id: str, p: dict) -> dict:
 
 @app.get("/api/v1/pet", tags=["pet"], summary="Профиль питомца")
 def get_pet(auth: Auth = Depends(current_auth)):
-    pet = find_pet(current_connection(auth).id)
+    conn = optional_connection(auth)
+    if not conn:
+        raise ApiError(404, "not_found", "Профиль питомца ещё не создан")
+    pet = find_pet(conn.id)
     if not pet:
         raise ApiError(404, "not_found", "Профиль питомца ещё не создан")
     return pet_out(pet.id, pet.to_dict())
@@ -593,20 +602,31 @@ def anomaly_dict(d) -> dict:
 @app.get("/api/v1/meals", tags=["diary"], summary="Приёмы пищи (список по страницам)")
 def get_meals(limit: int = Query(20, ge=1, le=100), cursor: Optional[str] = None,
               auth: Auth = Depends(current_auth)):
-    return list_page("meals", current_connection(auth).id, limit, cursor, meal_dict)
+    conn = optional_connection(auth)
+    if not conn:
+        return {"items": [], "next_cursor": None, "has_more": False}
+    return list_page("meals", conn.id, limit, cursor, meal_dict)
 
 
 @app.get("/api/v1/anomalies", tags=["diary"], summary="Аномалии (кашель, долгая пауза)")
 def get_anomalies(limit: int = Query(20, ge=1, le=100), cursor: Optional[str] = None,
                   auth: Auth = Depends(current_auth)):
-    return list_page("anomalies", current_connection(auth).id, limit, cursor, anomaly_dict)
+    conn = optional_connection(auth)
+    if not conn:
+        return {"items": [], "next_cursor": None, "has_more": False}
+    return list_page("anomalies", conn.id, limit, cursor, anomaly_dict)
 
 
 @app.get("/api/v1/diary/summary", tags=["diary"], summary="Сводка для графиков Дневника")
 def get_diary_summary(period: Literal["week", "month"], auth: Auth = Depends(current_auth)):
-    conn_id = current_connection(auth).id
     days_count = 7 if period == "week" else 30
     first = datetime.now(timezone.utc).date() - timedelta(days=days_count - 1)
+    conn = optional_connection(auth)
+    if not conn:
+        days = [{"date": (first + timedelta(days=i)).isoformat(), "meals": 0, "anomalies": 0}
+                for i in range(days_count)]
+        return {"period": period, "days": days, "avg_calm_index": 0}
+    conn_id = conn.id
     start = datetime(first.year, first.month, first.day, tzinfo=timezone.utc)
 
     def since(name):

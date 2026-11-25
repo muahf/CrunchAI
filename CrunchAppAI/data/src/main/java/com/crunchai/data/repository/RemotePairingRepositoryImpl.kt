@@ -10,17 +10,19 @@ import com.example.crunchai.domain.repository.PairingRepository
 import javax.inject.Inject
 
 class RemotePairingRepositoryImpl
-    @Inject
-    constructor(
-        private val api: CrunchApi,
-    ) : PairingRepository {
-        override suspend fun createKey(): DomainResult<PairingSession> =
-            safeApiCall {
-                api.createPairKey().toDomain()
-            }
+@Inject
+constructor(
+    private val api: CrunchApi,
+) : PairingRepository {
+    override suspend fun createKey(): DomainResult<PairingSession> =
+        safeApiCall {
+            api.createPairKey().toDomain()
+        }
 
-        override suspend fun pair(key: String): DomainResult<PairingSession> =
-            safeApiCall {
-                api.pairWithStation(PairRequestDto(key = key)).toDomain()
-            }
+    override suspend fun pair(key: String): DomainResult<PairingSession> {
+        val clean = key.trim().uppercase()
+        return safeApiCall {
+            api.pairWithStation(PairRequestDto(key = clean)).toDomain(clean)
+        }
     }
+}

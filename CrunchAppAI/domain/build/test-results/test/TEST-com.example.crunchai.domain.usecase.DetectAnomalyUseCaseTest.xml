@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-23T10:58:19.300Z" hostname="DESKTOP-029KHI5" time="0.03">
+<testsuite name="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-25T18:36:28.339Z" hostname="DESKTOP-029KHI5" time="0.011">
   <properties/>
-  <testcase name="три кашля за 60 секунд определяются как аномалия COUGH" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.027"/>
-  <testcase name="пустой список событий не даёт аномалии" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.001"/>
-  <testcase name="обычный приём пищи с редким кашлем проходит без аномалий" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.001"/>
-  <testcase name="тишина более 120 секунд после еды определяется как LONG_PAUSE" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.001"/>
+  <testcase name="три кашля за 60 секунд определяются как аномалия COUGH" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.011"/>
+  <testcase name="пустой список событий не даёт аномалии" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.0"/>
+  <testcase name="обычный приём пищи с редким кашлем проходит без аномалий" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.0"/>
+  <testcase name="тишина более 120 секунд после еды определяется как LONG_PAUSE" classname="com.example.crunchai.domain.usecase.DetectAnomalyUseCaseTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

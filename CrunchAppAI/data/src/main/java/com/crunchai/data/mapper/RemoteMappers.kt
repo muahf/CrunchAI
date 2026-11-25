@@ -3,6 +3,7 @@ package com.crunchai.data.mapper
 import com.crunchai.data.remote.dto.AnomalyDto
 import com.crunchai.data.remote.dto.FoodAnalysisDto
 import com.crunchai.data.remote.dto.MealDto
+import com.crunchai.data.remote.dto.PairConfirmDto
 import com.crunchai.data.remote.dto.PairingSessionDto
 import com.crunchai.data.remote.dto.SoundEventDto
 import com.crunchai.data.remote.dto.SyncReportDto
@@ -18,27 +19,38 @@ import com.example.crunchai.domain.model.SoundEvent
 import com.example.crunchai.domain.model.SyncReport
 import java.time.Instant
 
+/** Сервер принимает тип звука строчными буквами: "cough", "chew"... */
 fun SoundEvent.toDto(): SoundEventDto =
     SoundEventDto(
         id = id,
-        type = type.name,
-        confidence = confidence,
+        type = type.name.lowercase(),
+        confidence = confidence.toDouble(),
         startedAt = startedAt.toString(),
-        durationSeconds = durationSeconds,
+        duration = durationSeconds,
     )
 
 fun SyncReportDto.toDomain(): SyncReport =
     SyncReport(
         accepted = accepted,
-        duplicateIds = duplicateIds,
+        duplicateIds = duplicates,
     )
 
+/** Станция создала ключ: ждём, пока Наблюдатель его введёт. */
 fun PairingSessionDto.toDomain(): PairingSession =
     PairingSession(
         key = key,
-        role = DeviceRole.entries.find { it.name.equals(role, ignoreCase = true) } ?: DeviceRole.OBSERVER,
-        status = PairingStatus.entries.find { it.name.equals(status, ignoreCase = true) } ?: PairingStatus.WAITING,
-        expiresAt = expiresAt?.let { Instant.parse(it) },
+        role = DeviceRole.STATION,
+        status = PairingStatus.WAITING,
+        expiresAt = Instant.parse(expiresAt),
+    )
+
+/** Наблюдатель ввёл ключ: сервер ключ не возвращает, поэтому берём тот, что вводили. */
+fun PairConfirmDto.toDomain(key: String): PairingSession =
+    PairingSession(
+        key = key,
+        role = DeviceRole.OBSERVER,
+        status = PairingStatus.PAIRED,
+        expiresAt = null,
     )
 
 fun FoodAnalysisDto.toDomain(): FoodAnalysis =
@@ -46,17 +58,16 @@ fun FoodAnalysisDto.toDomain(): FoodAnalysis =
         id = id,
         kind = PhotoKind.entries.find { it.name.equals(kind, ignoreCase = true) } ?: PhotoKind.BOWL_AFTER,
         eatenPercent = eatenPercent,
-        composition = composition,
-        risks = risks,
+        composition = comment, // на сервере один текст «comment»
     )
 
-fun MealDto.toDomain(): Meal = Meal(id, Instant.parse(startedAt), durationSeconds, calmIndex)
+fun MealDto.toDomain(): Meal = Meal(id, Instant.parse(startedAt), duration, calmIndex)
 
 fun AnomalyDto.toDomain(): Anomaly =
     Anomaly(
         id = id,
-        type = AnomalyType.valueOf(type.uppercase()),
+        type = AnomalyType.entries.find { it.name.equals(type, ignoreCase = true) } ?: AnomalyType.COUGH,
         startedAt = Instant.parse(startedAt),
-        durationSeconds = durationSeconds,
-        seen = seen,
+        durationSeconds = duration,
+        seen = false, // сервер статус «просмотрено» в списке не отдаёт
     )

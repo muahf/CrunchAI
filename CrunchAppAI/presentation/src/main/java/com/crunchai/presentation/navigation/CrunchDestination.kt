@@ -1,21 +1,34 @@
 package com.crunchai.presentation.navigation
 
+import kotlinx.serialization.Serializable
+
+/** Режим экрана «Фото»: что снимаем. Это аргумент навигации. */
+@Serializable
+enum class FoodAnalysisMode { BOWL, LABEL }
+
+/**
+ * Все экраны приложения. Аргументы передаются как поля класса,
+ * строки с маршрутами писать не нужно.
+ */
 sealed interface CrunchDestination {
-    val route: String
+    @Serializable
+    data object Home : CrunchDestination
+    @Serializable
+    data object Auth : CrunchDestination
+    @Serializable
+    data object Diary : CrunchDestination
 
-    data object Home : CrunchDestination {
-        override val route: String = "home"
-    }
+    @Serializable
+    data object Station : CrunchDestination
 
-    data object Pairing : CrunchDestination {
-        override val route: String = "pairing"
-    }
+    @Serializable
+    data object Pairing : CrunchDestination
 
-    data object FoodAnalysis : CrunchDestination {
-        override val route: String = "food_analysis"
-    }
+    @Serializable
+    data object PetProfile : CrunchDestination
 
-    data object PetProfile : CrunchDestination {
-        override val route: String = "pet_profile"
-    }
+    @Serializable
+    data class FoodAnalysis(
+        val mode: FoodAnalysisMode = FoodAnalysisMode.BOWL,
+    ) : CrunchDestination
 }

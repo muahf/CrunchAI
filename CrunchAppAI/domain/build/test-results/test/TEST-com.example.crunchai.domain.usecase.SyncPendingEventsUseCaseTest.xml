@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-23T10:58:19.494Z" hostname="DESKTOP-029KHI5" time="0.019">
+<testsuite name="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-25T18:36:28.453Z" hostname="DESKTOP-029KHI5" time="0.012">
   <properties/>
-  <testcase name="отправляет локальные звуки и помечает их как SENT" classname="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" time="0.008"/>
-  <testcase name="если неотправленных звуков нет, возвращается accepted 0 без запроса на сервер" classname="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" time="0.004"/>
+  <testcase name="отправляет локальные звуки и помечает их как SENT" classname="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" time="0.007"/>
+  <testcase name="если неотправленных звуков нет, возвращается accepted 0 без запроса на сервер" classname="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" time="0.002"/>
   <testcase name="при ошибке сети звуки остаются неотправленными" classname="com.example.crunchai.domain.usecase.SyncPendingEventsUseCaseTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

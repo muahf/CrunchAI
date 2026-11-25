@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.common.DomainResultTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-23T10:58:17.501Z" hostname="DESKTOP-029KHI5" time="0.018">
+<testsuite name="com.example.crunchai.domain.common.DomainResultTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-25T18:36:28.114Z" hostname="DESKTOP-029KHI5" time="0.01">
   <properties/>
-  <testcase name="onSuccess вызывается только при успехе" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.006"/>
-  <testcase name="map меняет значение у успеха" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.001"/>
+  <testcase name="onSuccess вызывается только при успехе" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.004"/>
+  <testcase name="map меняет значение у успеха" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.0"/>
   <testcase name="onFailure получает ошибку" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.001"/>
   <testcase name="getOrNull отдаёт значение у успеха и null у ошибки" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.002"/>
   <testcase name="map не трогает ошибку" classname="com.example.crunchai.domain.common.DomainResultTest" time="0.0"/>

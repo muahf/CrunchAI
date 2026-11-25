@@ -52,6 +52,7 @@ private fun PreviewHome(state: HomeUiState) =
         HomeScreen(
             state = state,
             onRetry = {},
+            onNavigateToDiary = {},
             onNavigateToPairing = {},
             onNavigateToFoodAnalysis = {},
             onNavigateToPetProfile = {},

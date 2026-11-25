@@ -1,64 +1,65 @@
 package com.crunchai.data.mapper
 
+import com.crunchai.data.remote.dto.AnomalyDto
 import com.crunchai.data.remote.dto.FoodAnalysisDto
+import com.crunchai.data.remote.dto.MealDto
+import com.crunchai.data.remote.dto.PairConfirmDto
 import com.crunchai.data.remote.dto.PairingSessionDto
 import com.crunchai.data.remote.dto.SyncReportDto
+import com.example.crunchai.domain.model.AnomalyType
 import com.example.crunchai.domain.model.DeviceRole
 import com.example.crunchai.domain.model.PairingStatus
 import com.example.crunchai.domain.model.PhotoKind
-import com.example.crunchai.domain.model.SoundEvent
-import com.example.crunchai.domain.model.SoundType
-import org.junit.Assert.assertEquals
-import org.junit.Test
 import java.time.Instant
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
 
 class RemoteMappersTest {
     @Test
-    fun `SoundEvent корректно мапится в SoundEventDto`() {
-        val now = Instant.parse("2026-11-20T09:00:00Z")
-        val domain = SoundEvent("e1", SoundType.COUGH, 0.92f, now, 2)
-
-        val dto = domain.toDto()
-
-        assertEquals("e1", dto.id)
-        assertEquals("COUGH", dto.type)
-        assertEquals(0.92f, dto.confidence, 0.001f)
-        assertEquals("2026-11-20T09:00:00Z", dto.startedAt)
-        assertEquals(2, dto.durationSeconds)
+    fun `meal dto maps duration and time`() {
+        val meal = MealDto("m1", "2026-11-25T10:00:00Z", 300, 8).toDomain()
+        assertEquals(Instant.parse("2026-11-25T10:00:00Z"), meal.startedAt)
+        assertEquals(300, meal.durationSeconds)
+        assertEquals(8, meal.calmIndex)
     }
 
     @Test
-    fun `PairingSessionDto корректно мапится в PairingSession`() {
-        val dto =
-            PairingSessionDto(
-                key = "ABC-123",
-                role = "STATION",
-                status = "PAIRED",
-                expiresAt = "2026-11-20T10:00:00Z",
-            )
-
-        val domain = dto.toDomain()
-
-        assertEquals("ABC-123", domain.key)
-        assertEquals(DeviceRole.STATION, domain.role)
-        assertEquals(PairingStatus.PAIRED, domain.status)
-        assertEquals(Instant.parse("2026-11-20T10:00:00Z"), domain.expiresAt)
+    fun `anomaly dto maps lowercase type`() {
+        val a = AnomalyDto("a1", "cough", "2026-11-25T10:00:00Z", 4).toDomain()
+        assertEquals(AnomalyType.COUGH, a.type)
+        assertEquals(4, a.durationSeconds)
     }
 
     @Test
-    fun `SyncReportDto и FoodAnalysisDto мапятся в доменные модели`() {
-        val report = SyncReportDto(accepted = 5, duplicateIds = listOf("d1")).toDomain()
-        assertEquals(5, report.accepted)
-        assertEquals(listOf("d1"), report.duplicateIds)
+    fun `sync report maps duplicates`() {
+        val report = SyncReportDto(accepted = 2, duplicates = listOf("x")).toDomain()
+        assertEquals(2, report.accepted)
+        assertEquals(listOf("x"), report.duplicateIds)
+    }
 
-        val analysis =
-            FoodAnalysisDto(
-                id = "f1",
-                kind = "BOWL_AFTER",
-                eatenPercent = 75,
-                risks = listOf("Нет рисков"),
-            ).toDomain()
-        assertEquals(PhotoKind.BOWL_AFTER, analysis.kind)
-        assertEquals(75, analysis.eatenPercent)
+    @Test
+    fun `created pairing session is station waiting`() {
+        val s = PairingSessionDto("AB12CD", "2026-11-25T10:10:00Z").toDomain()
+        assertEquals(DeviceRole.STATION, s.role)
+        assertEquals(PairingStatus.WAITING, s.status)
+        assertEquals(Instant.parse("2026-11-25T10:10:00Z"), s.expiresAt)
+    }
+
+    @Test
+    fun `confirmed pairing is observer paired and keeps entered key`() {
+        val s = PairConfirmDto("c1", "Кухня").toDomain("AB12CD")
+        assertEquals(DeviceRole.OBSERVER, s.role)
+        assertEquals(PairingStatus.PAIRED, s.status)
+        assertEquals("AB12CD", s.key)
+        assertNull(s.expiresAt)
+    }
+
+    @Test
+    fun `food analysis maps kind and comment`() {
+        val f = FoodAnalysisDto("f1", "bowl_after", 70, "Съел почти всё", "2026-11-25T10:00:00Z").toDomain()
+        assertEquals(PhotoKind.BOWL_AFTER, f.kind)
+        assertEquals(70, f.eatenPercent)
+        assertEquals("Съел почти всё", f.composition)
     }
 }

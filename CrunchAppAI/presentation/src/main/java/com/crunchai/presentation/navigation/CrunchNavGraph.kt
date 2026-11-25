@@ -10,7 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.crunchai.presentation.auth.AuthRoute
 import com.crunchai.presentation.home.HomeRoute
+import com.crunchai.presentation.station.StationRoute
+import com.example.crunchai.domain.model.DeviceRole
 
 @Composable
 fun CrunchNavGraph(
@@ -19,27 +23,57 @@ fun CrunchNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = CrunchDestination.Home.route,
+        startDestination = CrunchDestination.Auth,
         modifier = modifier,
     ) {
-        composable(route = CrunchDestination.Home.route) {
+        composable<CrunchDestination.Home> {
             HomeRoute(
-                onNavigateToPairing = { navController.navigate(CrunchDestination.Pairing.route) },
-                onNavigateToFoodAnalysis = { navController.navigate(CrunchDestination.FoodAnalysis.route) },
-                onNavigateToPetProfile = { navController.navigate(CrunchDestination.PetProfile.route) },
+                onNavigateToDiary = { navController.navigate(CrunchDestination.Diary) },
+                onNavigateToPairing = { navController.navigate(CrunchDestination.Pairing) },
+                onNavigateToFoodAnalysis = {
+                    navController.navigate(CrunchDestination.FoodAnalysis(FoodAnalysisMode.BOWL))
+                },
+                onNavigateToPetProfile = { navController.navigate(CrunchDestination.PetProfile) },
             )
         }
 
-        composable(route = CrunchDestination.Pairing.route) {
+        composable<CrunchDestination.Station> {
+            StationRoute(
+                onNavigateToPairing = { navController.navigate(CrunchDestination.Pairing) },
+            )
+        }
+
+        composable<CrunchDestination.Diary> {
+            PlaceholderScreen(title = "Дневник")
+        }
+
+        composable<CrunchDestination.Pairing> {
             PlaceholderScreen(title = "Сопряжение устройств")
         }
 
-        composable(route = CrunchDestination.FoodAnalysis.route) {
-            PlaceholderScreen(title = "Анализ корма по фото")
+        composable<CrunchDestination.FoodAnalysis> { entry ->
+            val args = entry.toRoute<CrunchDestination.FoodAnalysis>()
+            PlaceholderScreen(title = "Анализ корма: ${args.mode}")
         }
 
-        composable(route = CrunchDestination.PetProfile.route) {
+        composable<CrunchDestination.PetProfile> {
             PlaceholderScreen(title = "Профиль питомца")
+        }
+
+        composable<CrunchDestination.Auth> {
+            AuthRoute(
+                onAuthenticated = { role ->
+                    val destination: CrunchDestination =
+                        if (role == DeviceRole.STATION) {
+                            CrunchDestination.Station
+                        } else {
+                            CrunchDestination.Home
+                        }
+                    navController.navigate(destination) {
+                        popUpTo(CrunchDestination.Auth) { inclusive = true }
+                    }
+                },
+            )
         }
     }
 }

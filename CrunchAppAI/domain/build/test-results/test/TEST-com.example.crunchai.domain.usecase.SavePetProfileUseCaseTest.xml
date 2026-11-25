@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-23T10:58:19.450Z" hostname="DESKTOP-029KHI5" time="0.04">
+<testsuite name="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-25T18:36:28.426Z" hostname="DESKTOP-029KHI5" time="0.025">
   <properties/>
-  <testcase name="пустое имя это ошибка и в репозиторий ничего не уходит" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.008"/>
-  <testcase name="необязательные поля можно не заполнять" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.008"/>
-  <testcase name="ошибка репозитория возвращается как есть" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.007"/>
-  <testcase name="оценка кондиции 10 это ошибка поля bodyScore" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.005"/>
+  <testcase name="пустое имя это ошибка и в репозиторий ничего не уходит" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.006"/>
+  <testcase name="необязательные поля можно не заполнять" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.005"/>
+  <testcase name="ошибка репозитория возвращается как есть" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.005"/>
+  <testcase name="оценка кондиции 10 это ошибка поля bodyScore" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.003"/>
   <testcase name="корректный профиль сохраняется, имя обрезается по краям" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.003"/>
-  <testcase name="вес 500 кг это ошибка поля weightKg" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.007"/>
+  <testcase name="вес 500 кг это ошибка поля weightKg" classname="com.example.crunchai.domain.usecase.SavePetProfileUseCaseTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

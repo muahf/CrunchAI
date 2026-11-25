@@ -4,9 +4,10 @@ import com.example.crunchai.domain.common.DomainError
 import com.example.crunchai.domain.common.DomainResult
 import com.example.crunchai.domain.model.Pet
 import com.example.crunchai.domain.repository.PetRepository
+import javax.inject.Inject
 
 /** Проверяет профиль питомца и сохраняет. Границы такие же, как на сервере. */
-class SavePetProfileUseCase(private val repository: PetRepository) {
+class SavePetProfileUseCase @Inject constructor(private val repository: PetRepository) {
 
     suspend operator fun invoke(pet: Pet): DomainResult<Unit> {
         val error = validate(pet)
