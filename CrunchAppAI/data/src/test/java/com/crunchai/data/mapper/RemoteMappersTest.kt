@@ -10,10 +10,10 @@ import com.example.crunchai.domain.model.AnomalyType
 import com.example.crunchai.domain.model.DeviceRole
 import com.example.crunchai.domain.model.PairingStatus
 import com.example.crunchai.domain.model.PhotoKind
-import java.time.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.Instant
 
 class RemoteMappersTest {
     @Test

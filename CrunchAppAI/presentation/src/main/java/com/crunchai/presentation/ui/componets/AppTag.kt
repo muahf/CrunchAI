@@ -40,33 +40,37 @@ fun AppTag(
 ) {
     val colors = MaterialTheme.colorScheme
     val extended = MaterialTheme.extendedColors
-    val container = when (kind) {
-        TagKind.Ok -> extended.successContainer
-        TagKind.Warning -> extended.warningContainer
-        TagKind.Error -> colors.errorContainer
-        TagKind.Info -> colors.primaryContainer
-    }
-    val content = when (kind) {
-        TagKind.Ok -> extended.onSuccessContainer
-        TagKind.Warning -> extended.onWarningContainer
-        TagKind.Error -> colors.onErrorContainer
-        TagKind.Info -> colors.onPrimaryContainer
-    }
-    val defaultIcon = if (showDefaultIcon) {
+    val container =
         when (kind) {
-            TagKind.Ok -> Icons.Filled.Check
-            TagKind.Error -> Icons.Filled.Warning
-            else -> null
+            TagKind.Ok -> extended.successContainer
+            TagKind.Warning -> extended.warningContainer
+            TagKind.Error -> colors.errorContainer
+            TagKind.Info -> colors.primaryContainer
         }
-    } else {
-        null
-    }
+    val content =
+        when (kind) {
+            TagKind.Ok -> extended.onSuccessContainer
+            TagKind.Warning -> extended.onWarningContainer
+            TagKind.Error -> colors.onErrorContainer
+            TagKind.Info -> colors.onPrimaryContainer
+        }
+    val defaultIcon =
+        if (showDefaultIcon) {
+            when (kind) {
+                TagKind.Ok -> Icons.Filled.Check
+                TagKind.Error -> Icons.Filled.Warning
+                else -> null
+            }
+        } else {
+            null
+        }
 
     Row(
-        modifier = modifier
-            .height(TagHeight)
-            .background(container, MaterialTheme.shapes.small)
-            .padding(horizontal = Space.s2),
+        modifier =
+            modifier
+                .height(TagHeight)
+                .background(container, MaterialTheme.shapes.small)
+                .padding(horizontal = Space.s2),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Space.s1),
     ) {

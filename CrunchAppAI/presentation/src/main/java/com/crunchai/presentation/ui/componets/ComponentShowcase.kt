@@ -47,12 +47,13 @@ fun ComponentsShowcase(
     var cat by remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .systemBarsPadding()
-            .verticalScroll(rememberScrollState())
-            .padding(Space.s4),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .systemBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(Space.s4),
         verticalArrangement = Arrangement.spacedBy(Space.s5),
     ) {
         Text(
@@ -82,7 +83,7 @@ fun ComponentsShowcase(
                     {},
                     Modifier.weight(1f),
                     type = ButtonType.Tonal,
-                    loading = true
+                    loading = true,
                 )
             }
         }
@@ -93,7 +94,7 @@ fun ComponentsShowcase(
                 { name = it },
                 "Имя",
                 Modifier.fillMaxWidth(),
-                placeholder = "Введите имя"
+                placeholder = "Введите имя",
             )
             AppTextField(
                 value = "",
@@ -142,7 +143,10 @@ fun ComponentsShowcase(
 }
 
 @Composable
-private fun Section(title: String, content: @Composable () -> Unit) {
+private fun Section(
+    title: String,
+    content: @Composable () -> Unit,
+) {
     Column(verticalArrangement = Arrangement.spacedBy(Space.s3)) {
         Text(
             text = title,

@@ -9,7 +9,7 @@ object Space {
     val s1 = 4.dp
     val s2 = 8.dp
     val s3 = 12.dp
-    val s4 = 16.dp   // поля экрана
+    val s4 = 16.dp // поля экрана
     val s5 = 24.dp
     val s6 = 32.dp
     val s7 = 48.dp
@@ -23,9 +23,10 @@ object Radius {
     val XL = 28.dp
 }
 
-val AppShapes = Shapes(
-    small = RoundedCornerShape(Radius.S),
-    medium = RoundedCornerShape(Radius.M),
-    large = RoundedCornerShape(Radius.L),
-    extraLarge = RoundedCornerShape(Radius.XL),
-)
+val AppShapes =
+    Shapes(
+        small = RoundedCornerShape(Radius.S),
+        medium = RoundedCornerShape(Radius.M),
+        large = RoundedCornerShape(Radius.L),
+        extraLarge = RoundedCornerShape(Radius.XL),
+    )

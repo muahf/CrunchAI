@@ -1,6 +1,5 @@
 package com.crunchai.presentation.ui.components
 
-
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -33,8 +32,8 @@ import com.crunchai.presentation.ui.theme.extendedColors
 enum class BannerKind { Offline, Error }
 
 private val BannerIconSize = 24.dp
-private const val PulseDurationMs = 900
-private const val PulseMinAlpha = 0.35f
+private const val PULSE_DURATION_MS = 900
+private const val PULSE_MIN_ALPHA = 0.35f
 
 @Composable
 fun AppBanner(
@@ -50,10 +49,11 @@ fun AppBanner(
     val content = if (kind == BannerKind.Offline) extended.onWarningContainer else colors.onErrorContainer
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(container, MaterialTheme.shapes.medium)
-            .padding(horizontal = Space.s4, vertical = Space.s3),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(container, MaterialTheme.shapes.medium)
+                .padding(horizontal = Space.s4, vertical = Space.s3),
         horizontalArrangement = Arrangement.spacedBy(Space.s3),
     ) {
         val iconModifier = Modifier.size(BannerIconSize)
@@ -62,11 +62,12 @@ fun AppBanner(
             val transition = rememberInfiniteTransition(label = "offlinePulse")
             val alpha by transition.animateFloat(
                 initialValue = 1f,
-                targetValue = PulseMinAlpha,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(durationMillis = PulseDurationMs),
-                    repeatMode = RepeatMode.Reverse,
-                ),
+                targetValue = PULSE_MIN_ALPHA,
+                animationSpec =
+                    infiniteRepeatable(
+                        animation = tween(durationMillis = PULSE_DURATION_MS),
+                        repeatMode = RepeatMode.Reverse,
+                    ),
                 label = "offlineAlpha",
             )
             Icon(

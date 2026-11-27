@@ -5,8 +5,10 @@ import com.example.crunchai.domain.common.DomainResult
 import com.example.crunchai.domain.model.FoodAnalysis
 import com.example.crunchai.domain.model.PhotoKind
 import com.example.crunchai.domain.repository.FoodAnalysisRepository
+import javax.inject.Inject
 
-class AnalyzeBowlPhotoUseCase(
+class AnalyzeBowlPhotoUseCase @Inject
+constructor(
     private val repository: FoodAnalysisRepository,
 ) {
     suspend operator fun invoke(photo: ByteArray): DomainResult<FoodAnalysis> {

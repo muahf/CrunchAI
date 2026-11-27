@@ -53,21 +53,25 @@ fun PairConfirmDto.toDomain(key: String): PairingSession =
         expiresAt = null,
     )
 
-fun FoodAnalysisDto.toDomain(): FoodAnalysis =
-    FoodAnalysis(
+fun FoodAnalysisDto.toDomain(): FoodAnalysis {
+    // На сервере один текст «comment»
+    return FoodAnalysis(
         id = id,
         kind = PhotoKind.entries.find { it.name.equals(kind, ignoreCase = true) } ?: PhotoKind.BOWL_AFTER,
         eatenPercent = eatenPercent,
-        composition = comment, // на сервере один текст «comment»
+        composition = comment,
     )
+}
 
 fun MealDto.toDomain(): Meal = Meal(id, Instant.parse(startedAt), duration, calmIndex)
 
-fun AnomalyDto.toDomain(): Anomaly =
-    Anomaly(
+fun AnomalyDto.toDomain(): Anomaly {
+    // Сервер статус «просмотрено» в списке не отдаёт
+    return Anomaly(
         id = id,
         type = AnomalyType.entries.find { it.name.equals(type, ignoreCase = true) } ?: AnomalyType.COUGH,
         startedAt = Instant.parse(startedAt),
         durationSeconds = duration,
-        seen = false, // сервер статус «просмотрено» в списке не отдаёт
+        seen = false,
     )
+}

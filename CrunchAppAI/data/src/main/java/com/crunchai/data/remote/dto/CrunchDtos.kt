@@ -1,6 +1,5 @@
 package com.crunchai.data.remote.dto
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,22 +22,27 @@ data class ErrorBodyDto(
 
 // ---------- Звуки ----------
 
+// UUID, его создаёт телефон
+// type: "cough" | "chew" | "lap" | "bark" | "other" (строчными!)
+// started_at: 2026-11-25T10:00:00Z
+// duration: секунды, 0..600 (раньше было duration_seconds)
 @Serializable
 data class SoundEventDto(
-    val id: String,                       // UUID, его создаёт телефон
-    val type: String,                     // "cough" | "chew" | "lap" | "bark" | "other" (строчными!)
-    val confidence: Double,               // 0.0..1.0
-    @SerialName("started_at") val startedAt: String,  // 2026-11-25T10:00:00Z
-    val duration: Int,                    // секунды, 0..600 (раньше было duration_seconds)
+    val id: String,
+    val type: String,
+    val confidence: Double,
+    @SerialName("started_at") val startedAt: String,
+    val duration: Int,
 )
 
 @Serializable
 data class SyncBatchRequestDto(val events: List<SoundEventDto>)
 
+// duplicates раньше было duplicate_ids
 @Serializable
 data class SyncReportDto(
     val accepted: Int,
-    val duplicates: List<String> = emptyList(),   // раньше было duplicate_ids
+    val duplicates: List<String> = emptyList(),
 )
 
 // ---------- Дневник ----------
@@ -79,10 +83,11 @@ data class PairConfirmDto(
 
 // ---------- Анализ фото ----------
 
+// kind: "bowl_after" | "feed_label"
 @Serializable
 data class FoodAnalysisDto(
     val id: String,
-    val kind: String,                                   // "bowl_after" | "feed_label"
+    val kind: String,
     @SerialName("eaten_percent") val eatenPercent: Int? = null,
     val comment: String? = null,
     @SerialName("created_at") val createdAt: String,
@@ -90,13 +95,15 @@ data class FoodAnalysisDto(
 
 // ---------- Авторизация ----------
 
+// role: "station" | "observer"
 @Serializable
 data class AuthRequestDto(
     val email: String,
     val password: String,
-    val role: String,                                   // "station" | "observer"
+    val role: String,
     @SerialName("device_name") val deviceName: String,
 )
+
 @Serializable
 data class AuthResponseDto(
     val user: AuthUserDto,
@@ -113,11 +120,13 @@ data class AuthDeviceDto(val id: String, val role: String, val name: String)
 
 // ---------- Профиль питомца ----------
 
+// species: "cat" | "dog" | "other"
+// age_month: именно age_month, без «s»
 @Serializable
 data class PetDto(
     val name: String,
-    val species: String,                                // "cat" | "dog" | "other"
-    @SerialName("age_month") val ageMonth: Int? = null, // именно age_month, без «s»
+    val species: String,
+    @SerialName("age_month") val ageMonth: Int? = null,
     @SerialName("weight_kg") val weightKg: Double? = null,
     @SerialName("body_score") val bodyScore: Int? = null,
 )

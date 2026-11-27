@@ -42,17 +42,19 @@ fun AppTextField(
     val focused by interaction.collectIsFocusedAsState()
     val isError = errorText != null
 
-    val borderColor = when {
-        !enabled -> colors.outlineVariant
-        isError -> colors.error
-        focused -> colors.primary
-        else -> colors.outline
-    }
-    val labelColor = when {
-        isError -> colors.error
-        focused -> colors.primary
-        else -> colors.onSurfaceVariant
-    }
+    val borderColor =
+        when {
+            !enabled -> colors.outlineVariant
+            isError -> colors.error
+            focused -> colors.primary
+            else -> colors.outline
+        }
+    val labelColor =
+        when {
+            isError -> colors.error
+            focused -> colors.primary
+            else -> colors.onSurfaceVariant
+        }
     val textColor = if (enabled) colors.onSurface else colors.onSurface.copy(alpha = 0.38f)
     val fillColor = if (enabled) colors.surface else colors.onSurface.copy(alpha = 0.04f)
 
@@ -69,16 +71,17 @@ fun AppTextField(
             interactionSource = interaction,
             decorationBox = { innerTextField ->
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(FieldHeight)
-                        .background(fillColor, MaterialTheme.shapes.medium)
-                        .border(
-                            if (isError || focused) ActiveBorder else NormalBorder,
-                            borderColor,
-                            MaterialTheme.shapes.medium,
-                        )
-                        .padding(horizontal = Space.s4),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(FieldHeight)
+                            .background(fillColor, MaterialTheme.shapes.medium)
+                            .border(
+                                if (isError || focused) ActiveBorder else NormalBorder,
+                                borderColor,
+                                MaterialTheme.shapes.medium,
+                            )
+                            .padding(horizontal = Space.s4),
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     if (value.isEmpty() && placeholder.isNotEmpty()) {

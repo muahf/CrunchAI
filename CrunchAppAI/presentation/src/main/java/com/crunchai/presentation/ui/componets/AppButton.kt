@@ -22,7 +22,7 @@ import com.crunchai.presentation.ui.theme.Space
 enum class ButtonType { Primary, Tonal, Outline, Text, Danger }
 
 private val ButtonHeight = 48.dp
-private val ButtonPadding = 20.dp          // в макете 20 dp у всех, кроме Text (12 dp)
+private val ButtonPadding = 20.dp // в макете 20 dp у всех, кроме Text (12 dp)
 private val OutlineWidth = 1.5.dp
 
 @Composable
@@ -38,18 +38,20 @@ fun AppButton(
     val colors = MaterialTheme.colorScheme
     val isFlat = type == ButtonType.Outline || type == ButtonType.Text
 
-    val container = when (type) {
-        ButtonType.Primary -> colors.primary
-        ButtonType.Tonal -> colors.primaryContainer
-        ButtonType.Danger -> colors.error
-        else -> Color.Transparent
-    }
-    val content = when (type) {
-        ButtonType.Primary -> colors.onPrimary
-        ButtonType.Tonal -> colors.onPrimaryContainer
-        ButtonType.Danger -> colors.onError
-        else -> colors.primary
-    }
+    val container =
+        when (type) {
+            ButtonType.Primary -> colors.primary
+            ButtonType.Tonal -> colors.primaryContainer
+            ButtonType.Danger -> colors.error
+            else -> Color.Transparent
+        }
+    val content =
+        when (type) {
+            ButtonType.Primary -> colors.onPrimary
+            ButtonType.Tonal -> colors.onPrimaryContainer
+            ButtonType.Danger -> colors.onError
+            else -> colors.primary
+        }
     val disabledOverlay = colors.onSurface.copy(alpha = 0.12f)
     val disabledContent = colors.onSurface.copy(alpha = 0.38f)
 
@@ -59,20 +61,23 @@ fun AppButton(
         modifier = modifier.heightIn(min = ButtonHeight),
         enabled = enabled,
         shape = MaterialTheme.shapes.medium,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = container,
-            contentColor = content,
-            disabledContainerColor = if (isFlat) Color.Transparent else disabledOverlay,
-            disabledContentColor = disabledContent,
-        ),
-        border = if (type == ButtonType.Outline) {
-            BorderStroke(OutlineWidth, if (enabled) colors.outline else disabledOverlay)
-        } else {
-            null
-        },
-        contentPadding = PaddingValues(
-            horizontal = if (type == ButtonType.Text) Space.s3 else ButtonPadding,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = container,
+                contentColor = content,
+                disabledContainerColor = if (isFlat) Color.Transparent else disabledOverlay,
+                disabledContentColor = disabledContent,
+            ),
+        border =
+            if (type == ButtonType.Outline) {
+                BorderStroke(OutlineWidth, if (enabled) colors.outline else disabledOverlay)
+            } else {
+                null
+            },
+        contentPadding =
+            PaddingValues(
+                horizontal = if (type == ButtonType.Text) Space.s3 else ButtonPadding,
+            ),
     ) {
         if (leadingIcon != null && !loading) {
             leadingIcon()

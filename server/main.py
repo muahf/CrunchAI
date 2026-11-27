@@ -602,9 +602,7 @@ def anomaly_dict(d) -> dict:
 @app.get("/api/v1/meals", tags=["diary"], summary="Приёмы пищи (список по страницам)")
 def get_meals(limit: int = Query(20, ge=1, le=100), cursor: Optional[str] = None,
               auth: Auth = Depends(current_auth)):
-    conn = optional_connection(auth)
-    if not conn:
-        return {"items": [], "next_cursor": None, "has_more": False}
+    conn = current_connection(auth)
     return list_page("meals", conn.id, limit, cursor, meal_dict)
 
 

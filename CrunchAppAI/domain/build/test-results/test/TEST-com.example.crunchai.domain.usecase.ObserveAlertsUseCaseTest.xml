@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.crunchai.domain.usecase.ObserveAlertsUseCaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-25T18:36:28.400Z" hostname="DESKTOP-029KHI5" time="0.005">
+<testsuite name="com.example.crunchai.domain.usecase.ObserveAlertsUseCaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-27T09:37:04.079Z" hostname="DESKTOP-029KHI5" time="0.004">
   <properties/>
-  <testcase name="передаёт поток уведомлений об аномалиях из репозитория" classname="com.example.crunchai.domain.usecase.ObserveAlertsUseCaseTest" time="0.005"/>
+  <testcase name="передаёт поток уведомлений об аномалиях из репозитория" classname="com.example.crunchai.domain.usecase.ObserveAlertsUseCaseTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -54,11 +54,12 @@ private class FakePetRepository : PetRepository {
 
 private val now: Instant = Instant.parse("2026-11-24T09:00:00Z")
 
-private fun meal(id: String, calm: Int = 9) =
-    Meal(id = id, startedAt = now, durationSeconds = 240, calmIndex = calm)
+private fun meal(
+    id: String,
+    calm: Int = 9,
+) = Meal(id = id, startedAt = now, durationSeconds = 240, calmIndex = calm)
 
-private fun cough() =
-    Anomaly(id = "a1", type = AnomalyType.COUGH, startedAt = now, durationSeconds = 6)
+private fun cough() = Anomaly(id = "a1", type = AnomalyType.COUGH, startedAt = now, durationSeconds = 6)
 
 private val rex =
     Pet(id = "1", name = "Рекс", species = Species.DOG, ageMonths = 36, weightKg = 18.4, bodyScore = 5)

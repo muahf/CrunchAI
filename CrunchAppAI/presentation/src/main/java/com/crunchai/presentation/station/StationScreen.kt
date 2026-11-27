@@ -69,7 +69,7 @@ fun StationRoute(
     var hasMicPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
-                    PackageManager.PERMISSION_GRANTED,
+                PackageManager.PERMISSION_GRANTED,
         )
     }
     var showPermissionDialog by remember { mutableStateOf(!hasMicPermission) }

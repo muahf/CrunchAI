@@ -5,7 +5,7 @@ import com.example.crunchai.domain.model.Diary
 import com.example.crunchai.domain.model.DiaryDay
 import com.example.crunchai.domain.model.DiaryPeriod
 import com.example.crunchai.domain.repository.DiaryRepository
-import java.time.ZoneOffset
+import java.time.ZoneId
 import javax.inject.Inject
 
 class GetDiaryUseCase @Inject constructor(
@@ -21,8 +21,9 @@ class GetDiaryUseCase @Inject constructor(
         val meals = (mealsResult as DomainResult.Success).value
         val anomalies = (anomaliesResult as DomainResult.Success).value
 
-        val mealsByDate = meals.groupBy { it.startedAt.atZone(ZoneOffset.UTC).toLocalDate() }
-        val anomaliesByDate = anomalies.groupBy { it.startedAt.atZone(ZoneOffset.UTC).toLocalDate() }
+        val zoneId = ZoneId.systemDefault()
+        val mealsByDate = meals.groupBy { it.startedAt.atZone(zoneId).toLocalDate() }
+        val anomaliesByDate = anomalies.groupBy { it.startedAt.atZone(zoneId).toLocalDate() }
 
         val allDates = (mealsByDate.keys + anomaliesByDate.keys).sorted()
         val days = allDates.map { date ->

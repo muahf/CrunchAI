@@ -13,20 +13,20 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class RemoteFoodAnalysisRepositoryImpl
-@Inject
-constructor(
-    private val api: CrunchApi,
-) : FoodAnalysisRepository {
-    override suspend fun analyze(
-        kind: PhotoKind,
-        photo: ByteArray,
-    ): DomainResult<FoodAnalysis> =
-        safeApiCall {
-            // сервер ждёт "bowl_after" / "feed_label" строчными
-            val kindBody = kind.name.lowercase().toRequestBody("text/plain".toMediaType())
-            val photoBody = photo.toRequestBody("image/jpeg".toMediaType())
-            val photoPart = MultipartBody.Part.createFormData("photo", "photo.jpg", photoBody)
+    @Inject
+    constructor(
+        private val api: CrunchApi,
+    ) : FoodAnalysisRepository {
+        override suspend fun analyze(
+            kind: PhotoKind,
+            photo: ByteArray,
+        ): DomainResult<FoodAnalysis> =
+            safeApiCall {
+                // сервер ждёт "bowl_after" / "feed_label" строчными
+                val kindBody = kind.name.lowercase().toRequestBody("text/plain".toMediaType())
+                val photoBody = photo.toRequestBody("image/jpeg".toMediaType())
+                val photoPart = MultipartBody.Part.createFormData("photo", "photo.jpg", photoBody)
 
-            api.analyzeFood(kind = kindBody, photo = photoPart).toDomain()
-        }
-}
+                api.analyzeFood(kind = kindBody, photo = photoPart).toDomain()
+            }
+    }

@@ -1,5 +1,6 @@
 package com.crunchai.presentation.navigation
 
+import com.example.crunchai.domain.model.DeviceRole
 import kotlinx.serialization.Serializable
 
 /** Режим экрана «Фото»: что снимаем. Это аргумент навигации. */
@@ -7,14 +8,16 @@ import kotlinx.serialization.Serializable
 enum class FoodAnalysisMode { BOWL, LABEL }
 
 /**
- * Все экраны приложения. Аргументы передаются как поля класса,
- * строки с маршрутами писать не нужно.
+- Все экраны приложения. Аргументы передаются как поля класса,
+- строки с маршрутами писать не нужно.
  */
 sealed interface CrunchDestination {
     @Serializable
     data object Home : CrunchDestination
+
     @Serializable
     data object Auth : CrunchDestination
+
     @Serializable
     data object Diary : CrunchDestination
 
@@ -22,7 +25,9 @@ sealed interface CrunchDestination {
     data object Station : CrunchDestination
 
     @Serializable
-    data object Pairing : CrunchDestination
+    data class Pairing(
+        val role: DeviceRole = DeviceRole.OBSERVER,
+    ) : CrunchDestination
 
     @Serializable
     data object PetProfile : CrunchDestination
@@ -31,4 +36,7 @@ sealed interface CrunchDestination {
     data class FoodAnalysis(
         val mode: FoodAnalysisMode = FoodAnalysisMode.BOWL,
     ) : CrunchDestination
+
+    @Serializable
+    data object Monitor : CrunchDestination
 }

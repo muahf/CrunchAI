@@ -1,36 +1,26 @@
 package com.crunchai.presentation.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,18 +29,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.crunchai.presentation.R
+import com.crunchai.presentation.common.formatTime
 import com.crunchai.presentation.ui.components.AppBanner
+import com.crunchai.presentation.ui.components.AppBottomBar
 import com.crunchai.presentation.ui.components.AppButton
 import com.crunchai.presentation.ui.components.AppTag
 import com.crunchai.presentation.ui.components.BannerKind
 import com.crunchai.presentation.ui.components.ButtonType
+import com.crunchai.presentation.ui.components.ContentCard
+import com.crunchai.presentation.ui.components.ErrorState
+import com.crunchai.presentation.ui.components.MainTab
+import com.crunchai.presentation.ui.components.MealRow
 import com.crunchai.presentation.ui.components.TagKind
 import com.crunchai.presentation.ui.theme.LocalThemeController
 import com.crunchai.presentation.ui.theme.extendedColors
@@ -59,16 +53,8 @@ import com.example.crunchai.domain.model.AnomalyType
 import com.example.crunchai.domain.model.Meal
 import com.example.crunchai.domain.model.Pet
 import com.example.crunchai.domain.model.Species
-import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import com.crunchai.presentation.common.formatTime
-import com.crunchai.presentation.ui.components.AppBottomBar
-import com.crunchai.presentation.ui.components.ContentCard
-import com.crunchai.presentation.ui.components.ErrorState
-import com.crunchai.presentation.ui.components.MainTab
-import com.crunchai.presentation.ui.components.MealRow
 
 @Composable
 fun HomeRoute(
@@ -76,6 +62,7 @@ fun HomeRoute(
     onNavigateToPairing: () -> Unit,
     onNavigateToFoodAnalysis: () -> Unit,
     onNavigateToPetProfile: () -> Unit,
+    onNavigateToMonitor: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -86,6 +73,7 @@ fun HomeRoute(
         onNavigateToPairing = onNavigateToPairing,
         onNavigateToFoodAnalysis = onNavigateToFoodAnalysis,
         onNavigateToPetProfile = onNavigateToPetProfile,
+        onNavigateToMonitor = onNavigateToMonitor,
     )
 }
 
@@ -97,6 +85,7 @@ fun HomeScreen(
     onNavigateToFoodAnalysis: () -> Unit,
     onNavigateToPetProfile: () -> Unit,
     onNavigateToDiary: () -> Unit,
+    onNavigateToMonitor: () -> Unit,
 ) {
     val zone = ZoneId.systemDefault()
     val content = state.contentState as? HomeContentState.Content
@@ -105,8 +94,14 @@ fun HomeScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        bottomBar = { AppBottomBar(selected = MainTab.Home,
-            onHome = {}, onDiary = onNavigateToDiary, onPet = onNavigateToPetProfile) },
+        bottomBar = {
+            AppBottomBar(
+                selected = MainTab.Home,
+                onHome = {},
+                onDiary = onNavigateToDiary,
+                onPet = onNavigateToPetProfile,
+            )
+        },
     ) { inner ->
         Column(
             modifier =
@@ -130,13 +125,31 @@ fun HomeScreen(
                         Icon(painterResource(R.drawable.ic_theme), contentDescription = "Сменить тему")
                     }
                 }
+                Box(
+                    modifier =
+                        Modifier.clickable(
+                            onClick = if (state.isStationPaired) onNavigateToMonitor else onNavigateToPairing,
+                        ),
+                ) {
+                    AppTag(
+                        text = if (state.isStationPaired) "Станция подключена" else "Станция не привязана",
+                        kind = if (state.isStationPaired) TagKind.Ok else TagKind.Warning,
+                        showDefaultIcon = false,
+                    )
+                }
                 IconButton(onClick = { /* оповещения: практика про push */ }) {
                     Icon(painterResource(R.drawable.bell), contentDescription = "Оповещения")
                 }
+                IconButton(onClick = onNavigateToPairing) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_qr),
+                        contentDescription = "Сканировать QR-код",
+                    )
+                }
             }
-            Spacer(Modifier.height(8.dp)) // в макете у контента отступ сверху 8
+            Spacer(Modifier.height(8.dp))
 
-            when (val c = state.contentState) {
+            when (state.contentState) {
                 HomeContentState.Loading ->
                     CenterBox(Modifier.weight(1f)) {
                         CircularProgressIndicator()
@@ -144,7 +157,7 @@ fun HomeScreen(
 
                 is HomeContentState.Error ->
                     ErrorState(
-                        message = c.message,
+                        message = state.contentState.message,
                         onRetry = onRetry,
                         modifier = Modifier.weight(1f),
                     )
@@ -217,9 +230,6 @@ private fun CenterBox(
     modifier: Modifier,
     content: @Composable () -> Unit,
 ) = Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { content() }
-
-/** Простая карточка-контейнер: белая, с рамкой, скругление 16. */
-
 
 @Composable
 private fun PetCard(
@@ -304,7 +314,6 @@ private fun AnomalyBanner(
                 )
             }
         }
-        // «Подробнее»: кнопка 48 dp по центру, как в макете. Действие добавим позже.
         Box(
             modifier =
                 Modifier
@@ -352,8 +361,6 @@ private fun StatCard(
         }
     }
 }
-
-
 
 private fun petSubtitle(pet: Pet): String {
     val species =

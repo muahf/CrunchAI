@@ -4,9 +4,11 @@ import com.example.crunchai.domain.common.DomainError
 import com.example.crunchai.domain.common.DomainResult
 import com.example.crunchai.domain.model.PairingSession
 import com.example.crunchai.domain.repository.PairingRepository
+import javax.inject.Inject
 
 /** Наблюдатель сканирует QR-код и связывает телефоны. Ключ имеет вид ABC-123. */
-class PairWithStationUseCase(private val repository: PairingRepository) {
+class PairWithStationUseCase @Inject
+constructor(private val repository: PairingRepository) {
 
     suspend operator fun invoke(rawKey: String): DomainResult<PairingSession> {
         val key = rawKey.trim().uppercase()

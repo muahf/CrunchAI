@@ -30,9 +30,11 @@ abstract class DataBindsModule {
     @Binds
     @Singleton
     abstract fun bindNetworkMonitor(impl: AndroidNetworkMonitor): NetworkMonitor
+
     @Binds
     @Singleton
     abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
     @Binds
     @Singleton
     abstract fun bindTokenProvider(impl: SessionPreferencesDataSource): TokenProvider

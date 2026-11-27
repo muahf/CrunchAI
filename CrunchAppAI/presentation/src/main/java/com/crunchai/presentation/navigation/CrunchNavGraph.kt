@@ -1,10 +1,6 @@
 package com.crunchai.presentation.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,7 +8,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.crunchai.presentation.auth.AuthRoute
+import com.crunchai.presentation.diary.DiaryRoute
+import com.crunchai.presentation.food.FoodAnalysisRoute
 import com.crunchai.presentation.home.HomeRoute
+import com.crunchai.presentation.monitor.MonitorRoute
+import com.crunchai.presentation.pairing.PairingRoute
+import com.crunchai.presentation.pet.PetProfileRoute
 import com.crunchai.presentation.station.StationRoute
 import com.example.crunchai.domain.model.DeviceRole
 
@@ -29,35 +30,75 @@ fun CrunchNavGraph(
         composable<CrunchDestination.Home> {
             HomeRoute(
                 onNavigateToDiary = { navController.navigate(CrunchDestination.Diary) },
-                onNavigateToPairing = { navController.navigate(CrunchDestination.Pairing) },
+                onNavigateToPairing = {
+                    navController.navigate(CrunchDestination.Pairing(DeviceRole.OBSERVER))
+                },
                 onNavigateToFoodAnalysis = {
                     navController.navigate(CrunchDestination.FoodAnalysis(FoodAnalysisMode.BOWL))
                 },
                 onNavigateToPetProfile = { navController.navigate(CrunchDestination.PetProfile) },
+                onNavigateToMonitor = { navController.navigate(CrunchDestination.Monitor) },
             )
         }
 
         composable<CrunchDestination.Station> {
             StationRoute(
-                onNavigateToPairing = { navController.navigate(CrunchDestination.Pairing) },
+                onNavigateToPairing = {
+                    navController.navigate(CrunchDestination.Pairing(DeviceRole.STATION))
+                },
             )
         }
 
         composable<CrunchDestination.Diary> {
-            PlaceholderScreen(title = "Дневник")
+            DiaryRoute(
+                onNavigateToHome = {
+                    navController.navigate(CrunchDestination.Home) {
+                        popUpTo(CrunchDestination.Home) { inclusive = true }
+                    }
+                },
+            )
         }
 
-        composable<CrunchDestination.Pairing> {
-            PlaceholderScreen(title = "Сопряжение устройств")
+        composable<CrunchDestination.Pairing> { entry ->
+            val args = entry.toRoute<CrunchDestination.Pairing>()
+            PairingRoute(
+                role = args.role,
+                onBack = { navController.popBackStack() },
+                onPairedDone = {
+                    navController.navigate(CrunchDestination.Home) {
+                        popUpTo(CrunchDestination.Home) { inclusive = true }
+                    }
+                },
+            )
         }
 
         composable<CrunchDestination.FoodAnalysis> { entry ->
             val args = entry.toRoute<CrunchDestination.FoodAnalysis>()
-            PlaceholderScreen(title = "Анализ корма: ${args.mode}")
+            FoodAnalysisRoute(
+                initialMode = args.mode,
+                onBack = { navController.popBackStack() },
+            )
         }
 
         composable<CrunchDestination.PetProfile> {
-            PlaceholderScreen(title = "Профиль питомца")
+            PetProfileRoute(
+                onNavigateToHome = {
+                    navController.navigate(CrunchDestination.Home) {
+                        popUpTo(CrunchDestination.Home) { inclusive = true }
+                    }
+                },
+                onNavigateToDiary = {
+                    navController.navigate(CrunchDestination.Diary) {
+                        popUpTo(CrunchDestination.Home)
+                    }
+                },
+            )
+        }
+
+        composable<CrunchDestination.Monitor> {
+            MonitorRoute(
+                onBack = { navController.popBackStack() },
+            )
         }
 
         composable<CrunchDestination.Auth> {
@@ -75,12 +116,5 @@ fun CrunchNavGraph(
                 },
             )
         }
-    }
-}
-
-@Composable
-private fun PlaceholderScreen(title: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = title)
     }
 }

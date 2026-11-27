@@ -25,27 +25,30 @@ fun AppCard(
 ) {
     val colors = MaterialTheme.colorScheme
     val extended = MaterialTheme.extendedColors
-    val container = when (kind) {
-        CardKind.Default -> colors.surface
-        CardKind.Info -> colors.primaryContainer
-        CardKind.Warning -> extended.warningContainer
-        CardKind.Error -> colors.errorContainer
-        CardKind.Success -> extended.successContainer
-    }
-    val content = when (kind) {
-        CardKind.Default -> colors.onSurface
-        CardKind.Info -> colors.onPrimaryContainer
-        CardKind.Warning -> extended.onWarningContainer
-        CardKind.Error -> colors.onErrorContainer
-        CardKind.Success -> extended.onSuccessContainer
-    }
+    val container =
+        when (kind) {
+            CardKind.Default -> colors.surface
+            CardKind.Info -> colors.primaryContainer
+            CardKind.Warning -> extended.warningContainer
+            CardKind.Error -> colors.errorContainer
+            CardKind.Success -> extended.successContainer
+        }
+    val content =
+        when (kind) {
+            CardKind.Default -> colors.onSurface
+            CardKind.Info -> colors.onPrimaryContainer
+            CardKind.Warning -> extended.onWarningContainer
+            CardKind.Error -> colors.onErrorContainer
+            CardKind.Success -> extended.onSuccessContainer
+        }
     val shape = MaterialTheme.shapes.large
 
     Column(
-        modifier = modifier
-            .background(container, shape)
-            .then(if (kind == CardKind.Default) Modifier.border(1.dp, colors.outlineVariant, shape) else Modifier)
-            .padding(Space.s4),
+        modifier =
+            modifier
+                .background(container, shape)
+                .then(if (kind == CardKind.Default) Modifier.border(1.dp, colors.outlineVariant, shape) else Modifier)
+                .padding(Space.s4),
         verticalArrangement = Arrangement.spacedBy(Space.s2),
     ) {
         Text(text = title, style = MaterialTheme.typography.labelLarge, color = content)

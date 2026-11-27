@@ -65,8 +65,7 @@ private fun HomeDataPreview() = PreviewHome(dataState)
 
 @HomePreviews
 @Composable
-private fun HomeOfflinePreview() =
-    PreviewHome(dataState.copy(offlineSince = minutesAgo(35)))
+private fun HomeOfflinePreview() = PreviewHome(dataState.copy(offlineSince = minutesAgo(35)))
 
 @HomePreviews
 @Composable
@@ -83,8 +82,7 @@ private fun HomeLoadingPreview() = PreviewHome(HomeUiState(pet = previewPet))
 
 @HomePreviews
 @Composable
-private fun HomeEmptyPreview() =
-    PreviewHome(HomeUiState(pet = previewPet, contentState = HomeContentState.Empty))
+private fun HomeEmptyPreview() = PreviewHome(HomeUiState(pet = previewPet, contentState = HomeContentState.Empty))
 
 @HomePreviews
 @Composable

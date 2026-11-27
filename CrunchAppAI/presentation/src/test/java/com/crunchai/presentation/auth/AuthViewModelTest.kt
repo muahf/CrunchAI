@@ -18,12 +18,22 @@ import org.junit.Test
 private class FakeAuthRepo(var result: DomainResult<UserSession>) : AuthRepository {
     var calls = 0
 
-    override suspend fun signUp(email: String, password: String, role: DeviceRole, deviceName: String): DomainResult<UserSession> {
+    override suspend fun signUp(
+        email: String,
+        password: String,
+        role: DeviceRole,
+        deviceName: String,
+    ): DomainResult<UserSession> {
         calls++
         return result
     }
 
-    override suspend fun logIn(email: String, password: String, role: DeviceRole, deviceName: String): DomainResult<UserSession> {
+    override suspend fun logIn(
+        email: String,
+        password: String,
+        role: DeviceRole,
+        deviceName: String,
+    ): DomainResult<UserSession> {
         calls++
         return result
     }

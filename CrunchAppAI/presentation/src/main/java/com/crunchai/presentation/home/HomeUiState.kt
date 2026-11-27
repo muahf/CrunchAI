@@ -11,6 +11,7 @@ data class HomeUiState(
     val pet: Pet? = null,
     val contentState: HomeContentState = HomeContentState.Loading,
     val offlineSince: Instant? = null,
+    val isStationPaired: Boolean = false,
 )
 
 sealed interface HomeContentState {
